@@ -22,7 +22,6 @@ class BaseENV {
            
             if let loadedDict = loadedDict {
                 self.dict = loadedDict
-                print(self.dict)
             } else {
                 fatalError("Could not load \(resourcesPath).plist")
             }
