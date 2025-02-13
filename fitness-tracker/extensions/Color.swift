@@ -15,4 +15,5 @@ extension Color {
     static let Primary15 = Color("Primary15")
     static let Primary70 = Color("Primary70")
     static let Primary90 = Color("Primary90")
+    static let Delete = Color("Delete")
 }
