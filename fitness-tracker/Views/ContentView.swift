@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         
         TabView {
@@ -44,9 +46,22 @@ struct ContentView: View {
                 Text("History")
             }
         }
+        .tint(colorScheme == .light ? .Primary : .primary70)
+        .onAppear(perform: {
+            UITabBar.appearance().unselectedItemTintColor = colorScheme == .light ? .primary15 : .primary90
+            
+            UITabBar.appearance().backgroundColor = .surfaceContainer.withAlphaComponent(1)
+        })
     }
 }
-#Preview {
-    ContentView()
-        
+
+struct ContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ContentView()
+                .preferredColorScheme(.dark)
+            ContentView()
+                .preferredColorScheme(.light)
+        }
+    }
 }
