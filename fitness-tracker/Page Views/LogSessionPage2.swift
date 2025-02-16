@@ -16,18 +16,12 @@ struct LogSessionPage2: View {
         VStack {
             HStack {
                 Spacer()
-                
-                Text("Add Exercise")
-                    .font(.system(size: 16))
-                    .fontWeight(.bold)
-                
-                Spacer()
             }
             
             TextEditor(text: $text)
                 .frame(height:70)
                 .border(Color.orange, width: 1)
-                .padding(.top, 20)
+                .padding(.top, 50)
             
             Button(action: {
                 if !text.isEmpty {
@@ -44,7 +38,9 @@ struct LogSessionPage2: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
-            
+            .padding(.top,30)
+            Spacer()
+
         }
     }
 }

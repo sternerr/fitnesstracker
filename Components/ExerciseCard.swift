@@ -11,21 +11,34 @@ struct ExerciseCard: View {
     var title: String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.primary)
-                .padding(.top, 10)
-            
-            Spacer()
+        NavigationStack {
+            VStack {
+                HStack {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: HistoryPage2()) {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.primary70)
+                            .padding(8)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 2)
+                    }
+                }
+                
+                    .frame(width: 300, height: 80)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .shadow(radius: 5)
+                }
+            }
         }
-        .frame(width: 300, height: 80)
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 5)
     }
-}
 
 #Preview {
     ExerciseCard(title: "Exercise Title")
