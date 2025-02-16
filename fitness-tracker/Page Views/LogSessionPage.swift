@@ -38,7 +38,7 @@ struct LogSessionPage: View {
             }
             
             NavigationStack {
-                NavigationLink(destination: LogSessionWrite()) {
+                NavigationLink(destination: LogSessionPage2()) {
                     Text ("Add Exercise")
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -51,6 +51,7 @@ struct LogSessionPage: View {
             .padding(.horizontal)
         }
     }
+    
     
     func deleteExercise(at offsets: IndexSet) {
         exercises.remove(atOffsets: offsets)

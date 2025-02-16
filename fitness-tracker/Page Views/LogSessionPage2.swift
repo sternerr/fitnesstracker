@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LogSessionWrite: View {
+struct LogSessionPage2: View {
     @State private var exercises: [String] = []
     @State private var text: String = ""
     @Environment(\.presentationMode) var presentationMode
@@ -25,8 +25,8 @@ struct LogSessionWrite: View {
             }
             
             TextEditor(text: $text)
-                .frame(height:120)
-                .border(Color.orange, width: 2)
+                .frame(height:70)
+                .border(Color.orange, width: 1)
                 .padding(.top, 20)
             
             Button(action: {
@@ -50,5 +50,5 @@ struct LogSessionWrite: View {
 }
 
 #Preview {
-    LogSessionWrite()
+    LogSessionPage2()
 }
