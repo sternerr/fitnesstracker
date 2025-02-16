@@ -13,32 +13,11 @@ struct LogSessionPage: View {
     var body: some View {
         VStack {
             HStack {
-                Button(action: {
-                    print ("Back pressed")
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.title2)
-                        .foregroundColor(.primary70)
-                }
-                
                 Spacer()
-                
                 Text("Add Exercise")
                     .font(.system(size: 16))
-                    .fontWeight(.bold)
-                
+                    .padding(.top, 10)
                 Spacer()
-                
-                Button(action: {
-                    print("Done pressed")
-                }) {
-                    Text("Done")
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.primary70)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
             }
             .padding()
             
@@ -58,19 +37,19 @@ struct LogSessionPage: View {
                 .onDelete(perform: deleteExercise)
             }
             
-            Button(action: {
-                exercises.append("New Exercise \(exercises.count + 1)")
-            }) {
-                Text ("Add Exercise")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.primary70)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            NavigationStack {
+                NavigationLink(destination: LogSessionWrite()) {
+                    Text ("Add Exercise")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.primary70)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding()
             }
-            .padding()
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
     
     func deleteExercise(at offsets: IndexSet) {
@@ -85,7 +64,6 @@ struct ExerciseRow: View {
         HStack {
             Text(exerciseName)
                 .padding()
-                .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             
             Spacer()
