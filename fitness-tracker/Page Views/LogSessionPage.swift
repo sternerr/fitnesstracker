@@ -35,7 +35,7 @@ struct LogSessionPage: View {
                         }
                 }
                 .onDelete(perform: deleteExercise)
-            }
+         }
             
             NavigationStack {
                 NavigationLink(destination: LogSessionPage2()) {
@@ -51,9 +51,8 @@ struct LogSessionPage: View {
             .padding(.horizontal)
         }
     }
-    
-    
-    func deleteExercise(at offsets: IndexSet) {
+
+func deleteExercise(at offsets: IndexSet) {
         exercises.remove(atOffsets: offsets)
     }
 }
