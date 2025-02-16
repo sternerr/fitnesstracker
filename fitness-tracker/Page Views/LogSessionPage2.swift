@@ -10,18 +10,11 @@ import SwiftUI
 struct LogSessionWrite: View {
     @State private var exercises: [String] = []
     @State private var text: String = ""
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
             HStack {
-                Button(action: {
-                    print ("Back pressed")
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.title2)
-                        .foregroundColor(.primary70)
-                }
-                
                 Spacer()
                 
                 Text("Add Exercise")
@@ -29,17 +22,6 @@ struct LogSessionWrite: View {
                     .fontWeight(.bold)
                 
                 Spacer()
-                
-                Button(action: {
-                    print("Done pressed")
-                }) {
-                    Text("Done")
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.primary70)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
             }
             
             TextEditor(text: $text)
@@ -51,6 +33,8 @@ struct LogSessionWrite: View {
                 if !text.isEmpty {
                     exercises.append(text)
                     text = ""
+                    presentationMode.wrappedValue.dismiss()
+                    
                 }
             }) {
                 Text("Save")
