@@ -13,6 +13,9 @@ struct HistoryPage: View {
             Text("History")
                 .font(.system(size: 16))
                 .padding(.top, 10)
+            Calendar()
+            ExerciseCard(title: "Exercise Title")
+            
             Spacer()
         }
     }
