@@ -29,7 +29,6 @@ struct ContentView: View {
                 Image(systemName: "plus.circle")
                 Text("Add Exercise")
             }
-            
             NavigationStack{
                 GoalPage()
             }
