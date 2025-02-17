@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct LogSessionPage2: View {
-    @State private var exercises: [String] = []
+struct AddExercisePage: View {
+    @Binding var exercises: [Exercise]
     @State private var text: String = ""
     @Environment(\.presentationMode) var presentationMode
     
@@ -18,17 +18,16 @@ struct LogSessionPage2: View {
                 Spacer()
             }
             
-            TextEditor(text: $text)
+            TextField(text: $text) {}
                 .frame(height:70)
                 .border(Color.orange, width: 1)
                 .padding(.top, 50)
             
             Button(action: {
                 if !text.isEmpty {
-                    exercises.append(text)
+                    exercises.append(Exercise(name: text))
                     text = ""
                     presentationMode.wrappedValue.dismiss()
-                    
                 }
             }) {
                 Text("Save")
@@ -46,5 +45,5 @@ struct LogSessionPage2: View {
 }
 
 #Preview {
-    LogSessionPage2()
+    AddExercisePage()
 }
