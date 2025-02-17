@@ -16,7 +16,7 @@ struct TopBar<Content: View>: View {
                 content()
         }
         .overlay(
-            Text("Add Exercise")
+            Text(text)
                 .font(.title3)
                 .foregroundStyle(.onSurface)
         )
