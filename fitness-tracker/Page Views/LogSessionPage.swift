@@ -17,11 +17,15 @@ struct LogSessionPage: View {
             Block {
                 TopBar(text: "Add Workout") {
                     Spacer()
-                    NavigationLink(destination: {}) {
+                    NavigationLink(
+                        destination: SaveWorkoutPage(exercises: $exercises)
+                            .navigationBarHidden(true)
+                    ) {
                         CustomButton(title: "Done")
                     }
                 }
-               
+              
+                // Behövs Fixas
                 List {
                     ForEach(exercises.indices, id:\.self) { index in
                         ExerciseRow(exercise: exercises[index])
@@ -36,6 +40,7 @@ struct LogSessionPage: View {
                     }
                     
                 }
+                .padding(-8)
                 .scrollContentBackground(.hidden)
 
                 
@@ -53,6 +58,7 @@ struct LogSessionPage: View {
     }
 }
 
+// Behövs Fixas
 
 struct ExerciseRow: View {
     @State var exercise: Exercise
