@@ -8,70 +8,76 @@
 import SwiftUI
 
 struct LogSessionPage: View {
-    @State private var exercises: [String] = []
+    @State private var exercises: [Exercise] = [
+        Exercise(name: "Pull up")
+    ]
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Text("Add Exercise")
-                    .font(.system(size: 16))
-                    .padding(.top, 10)
-                Spacer()
-            }
-            .padding()
-            
-            List {
-                ForEach(exercises, id:\.self) {exercise in
-                    ExerciseRow(exerciseName: exercise)
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                if let index = exercises.firstIndex(of: exercise) {
+        Container {
+            Block {
+                TopBar(text: "Add Workout") {
+                    Spacer()
+                    NavigationLink(destination: {}) {
+                        CustomButton(title: "Done")
+                    }
+                }
+               
+                List {
+                    ForEach(exercises.indices, id:\.self) { index in
+                        ExerciseRow(exercise: exercises[index])
+                            .swipeActions {
+                                Button(role: .destructive) {
                                     exercises.remove(at: index)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+                                .tint(.delete)
                             }
-                        }
+                    }
+                    
                 }
-                .onDelete(perform: deleteExercise)
-         }
-            
-            NavigationStack {
-                NavigationLink(destination: LogSessionPage2()) {
-                    Text ("Add Exercise")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.primary70)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding()
-            }
-            .padding(.horizontal)
-        }
-    }
+                .scrollContentBackground(.hidden)
 
-func deleteExercise(at offsets: IndexSet) {
-        exercises.remove(atOffsets: offsets)
+                
+                NavigationLink(
+                    destination: AddExercisePage(exercises: $exercises)
+                        .navigationBarHidden(true)
+                ){
+                    CustomButton(title: "Add Exercise")
+                }
+                
+                Spacer()
+            }
+            .padding(.bottom)
+        }
     }
 }
 
+
 struct ExerciseRow: View {
-    let exerciseName: String
+    @State var exercise: Exercise
     
     var body: some View {
         HStack {
-            Text(exerciseName)
+            Text(exercise.name)
                 .padding()
                 .cornerRadius(8)
             
             Spacer()
+            
+            Image(systemName: "plus.app.fill")
+                .resizable()
+                .frame(width: 40.0, height: 40.0)
+                .foregroundStyle(.primary70)
+                .tint(.blue)
         }
-        .padding(.horizontal)
+        .background(
+            .secondarySurfaceContainer,
+            in: RoundedRectangle(cornerRadius: 8)
+        )
     }
 }
-    
-    #Preview {
-        LogSessionPage()
-    }
+
+#Preview {
+    LogSessionPage()
+}
