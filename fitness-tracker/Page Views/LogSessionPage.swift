@@ -9,7 +9,10 @@ import SwiftUI
 
 struct LogSessionPage: View {
     @State private var exercises: [Exercise] = [
-        Exercise(name: "Pull up")
+        Exercise(name: "Pull up"),
+        Exercise(name: "Pull down"),
+        Exercise(name: "Jump Rope"),
+        Exercise(name: "Squats")
     ]
     
     var body: some View {
@@ -24,63 +27,28 @@ struct LogSessionPage: View {
                         CustomButton(title: "Done")
                     }
                 }
-              
-                // Behövs Fixas
-                List {
-                    ForEach(exercises.indices, id:\.self) { index in
-                        ExerciseRow(exercise: exercises[index])
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    exercises.remove(at: index)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                .tint(.delete)
+                
+                Block {
+                    CustomList {
+                        ForEach(exercises.indices, id:\.self) { index in
+                            SwipeToDelete(action: {
+                                self.exercises.remove(at: index)
+                            }) {
+                                ExerciseRow(exercise: exercises[index])
                             }
+                        }
+                        
+                        NavigationLink(
+                            destination: AddExercisePage(exercises: $exercises)
+                                .navigationBarHidden(true)
+                        ){
+                            CustomButton(title: "Add Exercise")
+                        }
+                        .padding(.vertical)
                     }
-                    
                 }
-                .padding(-8)
-                .scrollContentBackground(.hidden)
-
-                
-                NavigationLink(
-                    destination: AddExercisePage(exercises: $exercises)
-                        .navigationBarHidden(true)
-                ){
-                    CustomButton(title: "Add Exercise")
-                }
-                
-                Spacer()
             }
-            .padding(.bottom)
         }
-    }
-}
-
-// Behövs Fixas
-
-struct ExerciseRow: View {
-    @State var exercise: Exercise
-    
-    var body: some View {
-        HStack {
-            Text(exercise.name)
-                .padding()
-                .cornerRadius(8)
-            
-            Spacer()
-            
-            Image(systemName: "plus.app.fill")
-                .resizable()
-                .frame(width: 40.0, height: 40.0)
-                .foregroundStyle(.primary70)
-                .tint(.blue)
-        }
-        .background(
-            .secondarySurfaceContainer,
-            in: RoundedRectangle(cornerRadius: 8)
-        )
     }
 }
 

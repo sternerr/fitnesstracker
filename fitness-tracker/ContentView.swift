@@ -27,7 +27,7 @@ struct ContentView: View {
             }
             .tabItem{
                 Image(systemName: "plus.circle")
-                Text("Add Exercise")
+                Text("Add Workout")
             }
             NavigationStack{
                 GoalPage()
