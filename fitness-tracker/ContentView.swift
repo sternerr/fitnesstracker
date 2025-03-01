@@ -14,36 +14,19 @@ struct ContentView: View {
     var body: some View {
         
         TabView {
-            NavigationStack{
-                Dashboard()
-            }
-            .tabItem{
-                Image(systemName: "house.fill")
-                Text("Dashboard")
-            }
             
-            NavigationStack{
-                LogSessionPage()
-            }
+            LogSessionPage()
             .tabItem{
                 Image(systemName: "plus.circle")
                 Text("Add Workout")
             }
-            NavigationStack{
-                GoalPage()
-            }
-            .tabItem{
-                Image(systemName: "flag.fill")
-                Text("Goals")
-            }
             
-            NavigationStack{
-                HistoryPage()
-            }
+            HistoryPage()
             .tabItem{
                 Image(systemName: "clock")
                 Text("History")
             }
+            
         }
         .tint(colorScheme == .light ? .Primary : .primary70)
         .onAppear(perform: {
