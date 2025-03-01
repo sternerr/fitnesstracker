@@ -1,0 +1,1 @@
+import SwiftData@Modelclass ExerciseModel {    var name: String    var sets: [SetModel]        init(name: String = "", sets: [SetModel] = []) {        self.name = name        self.sets = sets    }}
