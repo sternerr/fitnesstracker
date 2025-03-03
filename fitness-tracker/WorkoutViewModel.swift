@@ -24,4 +24,8 @@ class WorkoutViewModel {
         self.modelContext?.insert(WorkoutModel())
         self.fetchNewWorkout()
     }
+    
+    func addExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
+        workout.exercises.append(exercise)
+    }
 }
