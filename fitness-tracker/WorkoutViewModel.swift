@@ -39,6 +39,12 @@ class WorkoutViewModel {
         exercise.sets.append(set)
     }
     
+    func saveWorkout(for workout: WorkoutModel, name: String?, state: String?, date: String?) {
+        workout.name = name ?? workout.name
+        workout.state = state ?? workout.state
+        workout.date = date ?? workout.date
+    }
+    
     func removeWorkout(workout: WorkoutModel) {
         self.workouts.removeAll(where: { $0.id == workout.id })
     }
