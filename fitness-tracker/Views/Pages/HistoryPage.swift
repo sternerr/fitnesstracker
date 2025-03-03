@@ -9,8 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct HistoryPage: View {
+    @Environment(\.modelContext) private var modelContext
+    @State private var viewModel: WorkoutViewModel = WorkoutViewModel()
+    
     @State private var date = Date()
-    @State private var workouts: [WorkoutModel] = []
     
     var body: some View {
         NavigationStack {
@@ -23,94 +25,51 @@ struct HistoryPage: View {
                     ScrollView {
                         DatePicker("Start Date", selection: $date, displayedComponents: [.date])
                             .datePickerStyle(.graphical)
+                            .onChange(of: date, initial: false) {
+                                self.viewModel.fetchWorkout(byDate: self.formatt(date: self.date))
+                            }
                         
-                        ForEach(workouts) { workout in
-                            WorkoutCard(workout: workout)
+                        ForEach(self.viewModel.workouts) { workout in
+                            WorkoutCard(viewModel: self.$viewModel, workout: workout)
                         }
                         .padding(.vertical, 4)
                     }
                 }
                 
             }
-            .task {
-                if(workouts.count < 2) {
-                    workouts.append(WorkoutModel(name: "Workout 1"))
-                    workouts[0].exercises.append(ExerciseModel(name: "Pull Up"))
-                    workouts[0].exercises.append(ExerciseModel(name: "Pull Up"))
-                    workouts[0].exercises[0].sets.append(SetModel(reps: 12, weight: 30))
-
-                    workouts.append(WorkoutModel(name: "Workout 2"))
-                    workouts[1].exercises.append(ExerciseModel(name: "Push Up"))
-                    workouts[1].exercises[0].sets.append(SetModel(reps: 12, weight: 30))
-                    workouts[1].exercises[0].sets.append(SetModel(reps: 12, weight: 30))
-                }
-                print(date)
-            }
+        }
+        .onAppear {
+            self.viewModel.modelContext = self.modelContext
         }
     }
-}
-
-struct WorkoutCard: View {
-    @State var workout: WorkoutModel
     
-    var body: some View {
-        VStack {
-            VStack {
-                HStack {
-                    Text(workout.name)
-                    Spacer()
-                    NavigationLink {
-                        EditWorkoutPage(workout: workout)
-                            .navigationBarHidden(true)
-                    } label: {
-                        Image(systemName: "pencil.circle.fill")
-                            .font(.system(size: 32))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding()
-        }
-        .background(.secondarySurfaceContainer)
-        .clipShape(.rect(cornerRadius: 10))
+    func sampleData() {
+        self.viewModel.addWorkout()
+        
+        self.viewModel.workouts[0].name = "Workout 1"
+        self.viewModel.workouts[0].state = "saved"
+        self.viewModel.workouts[0].date = "2025-03-01"
+        
+        let exercise1 = ExerciseModel(name: "Pull Up")
+        let exercise2 = ExerciseModel(name: "Push Up")
+        
+        self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise1)
+        self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise2)
+        
+        self.viewModel.fetchWorkout(byDate: formatt(date: self.date))
+        
+        print(self.formatt(date: self.date))
     }
-}
-
-struct EditWorkoutPage: View {
-    @Environment(\.dismiss) private var dismiss
     
-    @State var workout: WorkoutModel
-    
-    var body: some View {
-        Container  {
-            
-            Block {
-                TopBar(text: "History") {
-                    Image(systemName: "arrow.backward.square.fill")
-                        .resizable()
-                        .frame(width: 40.0, height: 40.0)
-                        .foregroundStyle(.secondarySurfaceContainer)
-                        .onTapGesture { dismiss() }
-                    
-                    Spacer()
-                }
-            }
-            
-            Block {
-                ScrollView {
-                    ForEach(workout.exercises, id: \.self) { exercise in
-                        SwipeToDelete(action: {
-                            print("Delete Exercise")
-                        }) {
-                            ExerciseCard(exercise: exercise)
-                        }
-                    }
-                }
-            }
-        }
+    func formatt(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
     }
 }
 
 #Preview {
-    HistoryPage()
+    ContentView()
+        .modelContainer(for: WorkoutModel.self, inMemory: true)
 }
