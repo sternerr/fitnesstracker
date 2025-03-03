@@ -16,20 +16,33 @@ struct ContentView: View {
     var body: some View {
         
         TabView(selection: $selectedTab) {
+            Dashboard()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Dashboa")
+                }
+                .tag(0)
             
             HistoryPage()
-            .tabItem{
-                Image(systemName: "clock")
-                Text("History")
-            }
-            .tag(0)
+                .tabItem{
+                    Image(systemName: "calendar")
+                    Text("History")
+                }
+                .tag(1)
 
             AddWorkoutPage(selectedTab: $selectedTab)
-            .tabItem{
-                Image(systemName: "plus.circle")
-                Text("Add Workout")
-            }
-            .tag(1)
+                .tabItem{
+                    Image(systemName: "plus.circle")
+                    Text("Add Workout")
+                }
+                .tag(2)
+            
+            GoalPage()
+                .tabItem {
+                    Image(systemName: "flag.circle.fill")
+                    Text("Goals")
+                }
+                .tag(3)
         }
         .tint(colorScheme == .light ? .Primary : .primary70)
         .onAppear(perform: {
@@ -40,13 +53,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Preview: PreviewProvider {
-    static var previews: some View {
-        Group {
-            ContentView()
-                .preferredColorScheme(.dark)
-            ContentView()
-                .preferredColorScheme(.light)
-        }
-    }
+
+#Preview {
+    ContentView()
+        .modelContainer(for: WorkoutModel.self, inMemory: true)
 }
