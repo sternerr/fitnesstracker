@@ -28,4 +28,8 @@ class WorkoutViewModel {
     func addExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
         workout.exercises.append(exercise)
     }
+    
+    func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
+        workout.exercises.removeAll(where: { $0.id == exercise.id })
+    }
 }
