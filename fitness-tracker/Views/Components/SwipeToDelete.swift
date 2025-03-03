@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SwipeToDelete<Content: View>: View {
-    var action: () -> ()
     @ViewBuilder var content: () -> Content
-    
+    var action: () -> ()
+
     let viewID = UUID()
     var body: some View {
         ScrollViewReader { scrollProxy in
