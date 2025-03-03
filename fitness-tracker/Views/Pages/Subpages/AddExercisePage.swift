@@ -10,11 +10,7 @@ import SwiftData
 
 struct AddExercisePage: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    
-    @Query(filter: #Predicate<WorkoutModel> { workout in
-        workout.state == ""
-    }) var workouts: [WorkoutModel]
+    @Binding var viewModel: WorkoutViewModel
     
     @State private var text: String = ""
     
@@ -40,12 +36,11 @@ struct AddExercisePage: View {
                 }
                 
                 Button {
-                    if(self.workouts.count > 0 && !text.isEmpty) {
+                    if(!text.isEmpty) {
                         let exercise = ExerciseModel(name: text)
-                        self.workouts[0].exercises.append(exercise)
+                        self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise)
                         self.dismiss()
                     }
-                    print(self.workouts)
                 } label: {
                     CustomButton(title: "Create Exercise")
                 }
