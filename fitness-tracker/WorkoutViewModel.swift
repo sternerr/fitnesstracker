@@ -35,7 +35,15 @@ class WorkoutViewModel {
         workout.exercises.append(exercise)
     }
     
+    func addSet(for exercise: ExerciseModel, set: SetModel) {
+        exercise.sets.append(set)
+    }
+    
     func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
         workout.exercises.removeAll(where: { $0.id == exercise.id })
+    }
+    
+    func removeSet(for exercise: ExerciseModel, set: SetModel) {
+        exercise.sets.removeAll(where: { $0.id == set.id })
     }
 }
