@@ -14,15 +14,21 @@ class WorkoutViewModel {
     var modelContext: ModelContext? = nil
     var workouts: [WorkoutModel] = []
     
-    func fetchNewWorkout() {
+    func fetchWorkout(byState state: String) {
         self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
-            $0.state == ""
+            $0.state == state
+        }))) ?? []
+    }
+    
+    func fetchWorkout(byDate date: String) {
+        self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
+            $0.date == date
         }))) ?? []
     }
     
     func addWorkout() {
         self.modelContext?.insert(WorkoutModel())
-        self.fetchNewWorkout()
+        self.fetchWorkout(byState: "")
     }
     
     func addExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
