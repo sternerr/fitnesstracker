@@ -51,9 +51,11 @@ class WorkoutViewModel {
 
     func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
         workout.exercises.removeAll(where: { $0.id == exercise.id })
+        self.modelContext?.delete(exercise)
     }
     
     func removeSet(for exercise: ExerciseModel, set: SetModel) {
         exercise.sets.removeAll(where: { $0.id == set.id })
+        self.modelContext?.delete(set)
     }
 }
