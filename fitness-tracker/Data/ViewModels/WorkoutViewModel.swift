@@ -12,6 +12,7 @@ import Observation
 @Observable
 class WorkoutViewModel {
     var modelContext: ModelContext? = nil
+    
     var workouts: [WorkoutModel] = []
     
     func fetchWorkout(byState state: String) {

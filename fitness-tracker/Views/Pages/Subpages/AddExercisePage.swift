@@ -9,8 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct AddExercisePage: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    
     @Binding var viewModel: WorkoutViewModel
+    @State var exerciseViewModel: ExerciseViewModel = ExerciseViewModel()
     
     @State private var text: String = ""
     
@@ -39,7 +42,7 @@ struct AddExercisePage: View {
                         )
                 }
                 
-                if(self.filterExercises(exercises: self.exercises, filter: self.text).count <= 0) {
+                if(self.exerciseViewModel.filterExercises(exercises: self.exerciseViewModel.exercises, filter: self.text).count <= 0) {
                     Button {
                         if(!text.isEmpty) {
                             let exercise = ExerciseModel(name: text)
@@ -52,7 +55,7 @@ struct AddExercisePage: View {
                     }
                 } else {
                     List {
-                        ForEach(self.filterExercises(exercises: self.exercises, filter: self.text)) { e in
+                        ForEach(self.exerciseViewModel.filterExercises(exercises: self.exerciseViewModel.exercises, filter: self.text)) { e in
                             Text(e.name)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
@@ -68,15 +71,9 @@ struct AddExercisePage: View {
                 Spacer()
             }
         }
-    }
-
-    func filterExercises(exercises: [ExerciseModel], filter: String) -> [ExerciseModel] {
-        if(filter.isEmpty) {
-            return exercises
-        }
-        
-        return exercises.filter {
-            $0.name.contains(filter)
+        .onAppear {
+            self.exerciseViewModel.modelContext = modelContext
+            self.exerciseViewModel.fetchExercise()
         }
     }
 }
