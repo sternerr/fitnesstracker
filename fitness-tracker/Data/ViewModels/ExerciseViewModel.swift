@@ -26,7 +26,7 @@ class ExerciseViewModel {
         }
         
         return exercises.filter {
-            $0.name.contains(filter)
+            $0.name.localizedCaseInsensitiveContains(filter)
         }
     }
 }
