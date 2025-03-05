@@ -25,8 +25,8 @@ struct HistoryPage: View {
                     ScrollView {
                         DatePicker("Start Date", selection: $date, displayedComponents: [.date])
                             .datePickerStyle(.graphical)
-                            .onChange(of: date, initial: false) {
-                                self.viewModel.fetchWorkout(byDate: self.formatt(date: self.date))
+                            .onChange(of: date, initial: true) {
+                                self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
                             }
                         
                         ForEach(self.viewModel.workouts) { workout in
@@ -56,16 +56,7 @@ struct HistoryPage: View {
         self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise1)
         self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise2)
         
-        self.viewModel.fetchWorkout(byDate: formatt(date: self.date))
-        
-        print(self.formatt(date: self.date))
-    }
-    
-    func formatt(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
     }
 }
 
