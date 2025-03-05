@@ -25,7 +25,6 @@ class WorkoutViewModel {
         self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
             $0.date == date
         }))) ?? []
-        print (self.workouts)
     }
     
     func addWorkout() {
@@ -42,11 +41,9 @@ class WorkoutViewModel {
     }
     
     func saveWorkout(for workout: WorkoutModel, name: String?, state: String?, date: String?) {
-        let newWorkout = WorkoutModel ()
-        newWorkout.name = name ?? ""
-        newWorkout.state = state ?? ""
-        newWorkout.date = date ?? ""
-        workouts.append(newWorkout)
+        workout.name = name ?? workout.name
+        workout.state = state ?? workout.state
+        workout.date = date ?? workout.date
     }
     
     func removeWorkout(workout: WorkoutModel) {
