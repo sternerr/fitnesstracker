@@ -27,6 +27,28 @@ struct WorkoutCard: View {
                     }
                     .buttonStyle(.plain)
                 }
+                HStack {
+                    VStack{
+                        Text("Volume")
+                        Text("\(self.viewModel.getVolume(for: self.workout))")
+                    }
+                    
+                    Spacer()
+                    VStack{
+                        Text("Reps")
+                        Text("\(self.viewModel.getRepsCount(for: self.workout))")
+                    }
+                    Spacer()
+                    VStack{
+                        Text("Sets")
+                        Text("\(self.viewModel.getSetsCount(for: self.workout))")
+                    }
+                    Spacer()
+                    VStack{
+                        Text("Exercises")
+                        Text("\(self.viewModel.getExerciseCount(for: self.workout))")
+                    }
+                }
             }
             .padding()
         }

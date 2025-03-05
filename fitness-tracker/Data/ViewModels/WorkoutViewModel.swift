@@ -59,4 +59,42 @@ class WorkoutViewModel {
         exercise.sets.removeAll(where: { $0.id == set.id })
         self.modelContext?.delete(set)
     }
+    
+    func getExerciseCount(for workout: WorkoutModel) -> Int {
+        return workout.exercises.count
+    }
+    
+    func getSetsCount(for workout: WorkoutModel) -> Int {
+        var count: Int = 0
+        
+        workout.exercises.forEach {
+            count += $0.sets.count
+        }
+        
+        return count
+    }
+    
+    func getRepsCount(for workout: WorkoutModel) -> Int {
+        var count: Int = 0
+        
+        workout.exercises.forEach {
+            $0.sets.forEach {
+                count += Int($0.reps)
+            }
+        }
+        
+        return count
+    }
+    
+    func getVolume(for workout: WorkoutModel) -> Int {
+        var volume: Int = 0
+        
+        workout.exercises.forEach {
+            $0.sets.forEach {
+                volume += Int($0.reps) * (Int($0.weight) == 0 ? 1 : Int($0.weight))
+            }
+        }
+
+        return volume
+    }
 }
