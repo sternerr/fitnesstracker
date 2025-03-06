@@ -1,18 +1,17 @@
 //
-//  SaveExercisePage.swift
+//  SaveWorkoutPage.swift
 //  fitness-tracker
 //
-//  Created by Noah Sterner on 2025-02-17.
+//  Created by Noah Sterner on 2025-03-02.
 //
 
 import SwiftUI
+import SwiftData
 
 struct SaveWorkoutPage: View {
-    @Environment(\.presentationMode) private var presentationMode
     @Environment(\.dismiss) private var dismiss
+    @Binding var viewModel: WorkoutViewModel
     
-    @Binding var exercises: [Exercise]
-
     @State private var text: String = ""
     
     var body: some View {
@@ -23,7 +22,7 @@ struct SaveWorkoutPage: View {
                         .resizable()
                         .frame(width: 40.0, height: 40.0)
                         .foregroundStyle(.secondarySurfaceContainer)
-                        .onTapGesture { dismiss() }
+                        .onTapGesture { self.dismiss() }
                     
                     Spacer()
                 }
@@ -32,7 +31,7 @@ struct SaveWorkoutPage: View {
             Spacer()
             
             Block {
-                TextField("Save Workout", text: $text) {}
+                TextField("Save Workout", text: self.$text) {}
                     .padding()
                     .font(.body)
                     .cornerRadius(10)
@@ -45,8 +44,16 @@ struct SaveWorkoutPage: View {
                     .frame(minHeight: 128, maxHeight: 128)
                 
                 Button(action: {
-                    if !text.isEmpty {
-                        presentationMode.wrappedValue.dismiss()
+                    if(!self.text.isEmpty) {
+                        self.viewModel.saveWorkout(
+                            for: self.viewModel.workouts[0],
+                            name: self.text,
+                            state: "saved",
+                            date: Date.now.formatted(date: .numeric, time: .omitted)
+                        )
+                        
+                        self.viewModel.addWorkout()
+                        self.dismiss()
                     }
                 }) {
                     CustomButton(title: "Save")

@@ -17,6 +17,7 @@ struct Block<Content: View> :View {
         VStack {
             content()
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, padd)
     }
 }

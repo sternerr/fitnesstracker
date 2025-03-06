@@ -9,12 +9,7 @@ import SwiftUI
 
 struct Dashboard: View {
     var body: some View {
-        VStack {
-            Text("Dashboard")
-                .font(.system(size: 16))
-                .padding(.top, 10)
-            Spacer()
-        }
+        Container {}
     }
 }
 

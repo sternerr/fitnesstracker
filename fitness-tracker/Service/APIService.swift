@@ -44,3 +44,8 @@ class APIService {
         }
     }
 }
+
+struct Goal {
+    var title: String
+    var description: String
+}

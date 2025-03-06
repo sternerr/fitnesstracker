@@ -11,7 +11,7 @@ extension Color {
     static let Surface = Color("Surface")
     static let SurfaceContainer = Color("SurfaceContainer")
     static let SecondarySurfaceContainer = Color("SecondarySurfaceContainer")
-    static let OnSurfacce = Color("OnSurface")
+    static let OnSurface = Color("OnSurface")
     
     static let Primary = Color("Primary")
     static let Primary15 = Color("Primary15")
