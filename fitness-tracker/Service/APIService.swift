@@ -45,7 +45,8 @@ class APIService {
     }
 }
 
-struct Goal {
+struct Goal: Identifiable, Hashable {
+    let id: UUID = UUID()
     var title: String
     var description: String
 }
