@@ -10,14 +10,7 @@ import SwiftData
 import Foundation
 
 @Observable
-class ExerciseViewModel {
+class ExerciseViewModel: Identifiable {
     var modelContext: ModelContext? = nil
-    var exercises: [ExerciseModel] = []
-   
-    func fetchExercise() {
-        self.exercises = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<ExerciseModel> {
-            $0.workout == nil
-        }))) ?? []
-    }
-    
+    var exercise: ExerciseModel? = nil
 }

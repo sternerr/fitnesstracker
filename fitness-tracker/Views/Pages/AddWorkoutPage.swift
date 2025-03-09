@@ -16,7 +16,7 @@ struct AddWorkoutPage: View {
     
     var body: some View {
         NavigationStack {
-            if(self.viewModel.workouts.count > 0)  {
+            if(self.viewModel.workout != nil)  {
                 
                 Container {
                     Block {
@@ -25,10 +25,8 @@ struct AddWorkoutPage: View {
                                 .font(.system(size: 42))
                                 .foregroundStyle(.secondarySurfaceContainer)
                                 .onTapGesture {
-                                    self.viewModel.removeWorkout(workout: self.viewModel.workouts[0])
+                                    self.viewModel.remove()
                                     self.selectedTab = 0
-                                    
-                                    self.viewModel.addWorkout()
                                 }
                             
                             Spacer()
@@ -45,8 +43,8 @@ struct AddWorkoutPage: View {
                     
                     Block {
                         ScrollView {
-                            ForEach(self.viewModel.workouts[0].exercises, id: \.self) { exercise in
-                                ExerciseCard(viewModel: self.$viewModel, exercise: exercise)
+                            ForEach(self.viewModel.exercises) { evm in
+                                ExerciseCard(viewModel: evm)
                             }
                             
                             NavigationLink(
@@ -74,8 +72,8 @@ struct AddWorkoutPage: View {
         let exercise1 = ExerciseModel(name: "Pull Up")
         let exercise2 = ExerciseModel(name: "Pull Up")
         
-        self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise1)
-        self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise2)
+        self.viewModel.addExercise(exercise: exercise1)
+        self.viewModel.addExercise(exercise: exercise2)
     }
 }
 

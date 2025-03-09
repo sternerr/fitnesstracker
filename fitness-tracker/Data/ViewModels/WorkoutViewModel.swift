@@ -12,8 +12,9 @@ import Observation
 @Observable
 class WorkoutViewModel {
     var modelContext: ModelContext? = nil
-    
     var workouts: [WorkoutModel] = []
+    var workout: WorkoutModel? = nil
+    var exercises: [ExerciseViewModel] = []
     
     func fetchWorkout(byState state: String) {
         self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
@@ -29,11 +30,19 @@ class WorkoutViewModel {
     
     func addWorkout() {
         self.modelContext?.insert(WorkoutModel())
-        self.fetchWorkout(byState: "")
+        
+        self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
+            $0.state == ""
+        })))?.first ?? nil
     }
     
-    func addExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
-        workout.exercises.append(exercise)
+    func addExercise(exercise: ExerciseModel) {
+        let newExercieVM = ExerciseViewModel()
+        newExercieVM.exercise = exercise
+        
+        
+        self.workout?.exercises.append(exercise)
+        self.exercises.append(newExercieVM)
     }
     
     func addSet(for exercise: ExerciseModel, set: SetModel) {
@@ -46,8 +55,14 @@ class WorkoutViewModel {
         workout.date = date ?? workout.date
     }
     
-    func removeWorkout(workout: WorkoutModel) {
-        self.workouts.removeAll(where: { $0.id == workout.id })
+    func remove() {
+        guard self.workout != nil else { return }
+        
+        self.modelContext?.delete(self.workout!)
+        self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
+            $0.state == ""
+        })))?.first ?? nil
+        self.exercises = []
     }
 
     func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {

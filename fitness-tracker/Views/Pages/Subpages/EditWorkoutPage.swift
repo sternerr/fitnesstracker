@@ -31,7 +31,7 @@ struct EditWorkoutPage: View {
             Block {
                 ScrollView {
                     ForEach(workout.exercises, id: \.self) { exercise in
-                        ExerciseCard(viewModel: self.$viewModel, exercise: exercise)
+//                        ExerciseCard(viewModel: self.$viewModel, exercise: exercise)
                     }
                 }
             }

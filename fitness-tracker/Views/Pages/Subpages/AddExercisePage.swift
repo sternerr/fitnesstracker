@@ -13,7 +13,6 @@ struct AddExercisePage: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var viewModel: WorkoutViewModel
-    @State var exerciseViewModel: ExerciseViewModel = ExerciseViewModel()
     
     @State var exer: Suggestions = Suggestions(suggestions: [])
     
@@ -49,7 +48,7 @@ struct AddExercisePage: View {
                     Button {
                             let exercise = ExerciseModel(name: text)
                         
-                            self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise)
+                            self.viewModel.addExercise(exercise: exercise)
                             self.dismiss()
                     } label: {
                         CustomButton(title: "Create Exercise")
@@ -60,7 +59,7 @@ struct AddExercisePage: View {
                             Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
-                                    self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: ExerciseModel(name: e.value))
+                                    self.viewModel.addExercise(exercise: ExerciseModel(name: e.value))
                                     self.dismiss()
                                 }
                         }
@@ -73,7 +72,7 @@ struct AddExercisePage: View {
             }
         }
         .onAppear {
-            self.exerciseViewModel.modelContext = modelContext
+//            self.exerciseViewModel.modelContext = modelContext
         }
         
     }
