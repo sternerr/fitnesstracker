@@ -10,7 +10,7 @@ import SwiftUI
 
 struct GoalPage: View {
     @State private var goals: [Goal] = []
-    @State private var didUpdateGoals: Bool = false
+    @State private var selectedGoal: Goal? = nil
     
     var body: some View {
         NavigationStack {
@@ -22,11 +22,11 @@ struct GoalPage: View {
                 }
                 
                 List {
-                    ForEach(goals.indices, id:\.self) { index in
-                        GoalRow(goals: goals[index], didUpdate: $didUpdateGoals)
+                    ForEach($goals) { $item in
+                        GoalRow(goal: $item, selectedGoal: $selectedGoal)
                             .swipeActions {
                                 Button(role: .destructive) {
-                                    goals.remove(at: index)
+                                    //goals.remove(at: index)
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -37,14 +37,11 @@ struct GoalPage: View {
                 }
                 .padding(-8)
                 .scrollContentBackground(.hidden)
-                .onChange(of: didUpdateGoals) {
-                    
-                }
-                .navigationDestination(isPresented: $didUpdateGoals) {
-                    SaveGoalPage(goals: $goals)
+                .navigationDestination(item: $selectedGoal) { _ in
+                    SaveGoalPage(goals: $goals, selectedGoal: $selectedGoal)
                 }
                 NavigationLink(
-                    destination: SaveGoalPage(goals: $goals)
+                    destination: SaveGoalPage(goals: $goals, selectedGoal: .constant(nil))
                         .navigationBarHidden(true)
                 ){
                     CustomButton(title: "New Goal")
@@ -58,18 +55,18 @@ struct GoalPage: View {
 }
 
 struct GoalRow: View {
-    @State var goals: Goal
-    @Binding var didUpdate: Bool
+    @Binding var goal: Goal
+    @Binding var selectedGoal: Goal?
     
     var body: some View {
         HStack {
-            Text(goals.title)
+            Text(goal.title)
                 .padding()
                 .cornerRadius(8)
-            
+
             Spacer()
             Button {
-                didUpdate = true
+                selectedGoal = goal
             } label: {
                 Image(systemName: "pencil")
                     .font(.system(size: 20))
@@ -90,4 +87,3 @@ struct GoalRow: View {
 #Preview {
     GoalPage()
 }
-
