@@ -20,13 +20,4 @@ class ExerciseViewModel {
         }))) ?? []
     }
     
-    func filterExercises(exercises: [ExerciseModel], filter: String) -> [ExerciseModel] {
-        if(filter.isEmpty) {
-            return exercises
-        }
-        
-        return exercises.filter {
-            $0.name.localizedCaseInsensitiveContains(filter)
-        }
-    }
 }

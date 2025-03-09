@@ -53,15 +53,15 @@ struct ContentView: View {
             
             UITabBar.appearance().backgroundColor = .surfaceContainer.withAlphaComponent(1)
         })
-        .task {
-            if(self.exercises.count <= 0) {
-                let res = await APIService.shared.fetchExercises()
-                
-                res.forEach {
-                    self.modelContext.insert(ExerciseModel(name: $0.name))
-                }
-            }
-        }
+//        .task {
+//            if(self.exercises.count <= 0) {
+//                let res = await APIService.shared.fetchExercises()
+//                
+//                res.forEach {
+//                    self.modelContext.insert(ExerciseModel(name: $0.name))
+//                }
+//            }
+//        }
     }
 }
 
