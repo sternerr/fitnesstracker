@@ -39,7 +39,10 @@ struct SaveGoalPage: View {
     }
     
     var isValid:  Bool {
-        !goalText.isEmpty && !goalDescription.isEmpty
+        //Case 1
+        (!goalText.isEmpty && !goalDescription.isEmpty && !setsAmount.isEmpty && !repsAmount.isEmpty && !volumeAmount.isEmpty) ||
+        //Case 2
+        (!goalText.isEmpty && !goalDescription.isEmpty && setsAmount.isEmpty && repsAmount.isEmpty && volumeAmount.isEmpty)
     }
     
     var body: some View {
@@ -148,8 +151,8 @@ struct SaveGoalPage: View {
                     }
                 }) {
                     CustomButton(title: "Save")
-                    
                 }
+                .opacity(isValid ? 1 : 0.5)
                 
                 Spacer()
                 

@@ -33,6 +33,7 @@ class GoalViewModel {
         goal?.repsAmount = repsAmount
         goal?.volumeAmount = volumeAmount
         try? self.modelContext?.save()
+        fetchGoals()
     }
     
     func removeGoal(goal: GoalModel) {
