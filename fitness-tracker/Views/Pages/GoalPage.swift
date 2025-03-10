@@ -7,10 +7,13 @@
 
 
 import SwiftUI
+import SwiftData
 
 struct GoalPage: View {
-    @State private var goals: [Goal] = []
-    @State private var selectedGoal: Goal? = nil
+    @Environment(\.modelContext) private var modelContext
+    
+    @State private var viewModel = GoalViewModel()
+    @State private var selectedGoal: GoalModel? = nil
     
     var body: some View {
         NavigationStack {
@@ -22,11 +25,11 @@ struct GoalPage: View {
                 }
                 
                 List {
-                    ForEach($goals) { $item in
-                        GoalRow(goal: $item, selectedGoal: $selectedGoal)
+                    ForEach(viewModel.goals) { item in
+                        GoalRow(goal: item, selectedGoal: $selectedGoal)
                             .swipeActions {
                                 Button(role: .destructive) {
-                                    //goals.remove(at: index)
+                                    viewModel.removeGoal(goal: item)
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
@@ -38,10 +41,10 @@ struct GoalPage: View {
                 .padding(-8)
                 .scrollContentBackground(.hidden)
                 .navigationDestination(item: $selectedGoal) { _ in
-                    SaveGoalPage(goals: $goals, selectedGoal: $selectedGoal)
+                    SaveGoalPage(viewModel: viewModel, selectedGoal: $selectedGoal, mode: .edit)
                 }
                 NavigationLink(
-                    destination: SaveGoalPage(goals: $goals, selectedGoal: .constant(nil))
+                    destination: SaveGoalPage(viewModel: viewModel, selectedGoal: .constant(nil), mode: .add)
                         .navigationBarHidden(true)
                 ){
                     CustomButton(title: "New Goal")
@@ -50,13 +53,18 @@ struct GoalPage: View {
                 Spacer()
                 
             }
+            
+            .onAppear{
+                self.viewModel.modelContext = self.modelContext
+                self.viewModel.fetchGoals()
+            }
         }
     }
 }
 
 struct GoalRow: View {
-    @Binding var goal: Goal
-    @Binding var selectedGoal: Goal?
+    var goal: GoalModel
+    @Binding var selectedGoal: GoalModel?
     
     var body: some View {
         HStack {

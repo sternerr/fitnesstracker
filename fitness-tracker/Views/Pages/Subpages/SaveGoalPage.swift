@@ -8,21 +8,27 @@
 import SwiftUI
 import Combine
 
-
 struct SaveGoalPage: View {
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) private var presentationMode
-    @Binding var goals: [Goal]
-    @Binding var selectedGoal: Goal?
+
+    var viewModel: GoalViewModel
+    @Binding var selectedGoal: GoalModel?
     
-    @State private var goaltext: String = ""
-    @State private var descriptiontext: String = ""
+    @State private var goalText: String = ""
+    @State private var goalDescription: String = ""
     @State private var setsAmount: String = ""
     @State private var repsAmount: String = ""
     @State private var volumeAmount: String = ""
     
     @State private var selectedMeasurement: MeasurementType = .sets
+    
+    let mode: Mode
+    
+    enum Mode {
+        case add, edit
+    }
     
     enum MeasurementType: String, CaseIterable, Identifiable {
         case sets = "Sets"
@@ -32,6 +38,9 @@ struct SaveGoalPage: View {
         var id: String { self.rawValue }
     }
     
+    var isValid:  Bool {
+        !goalText.isEmpty && !goalDescription.isEmpty
+    }
     
     var body: some View {
         Container {
@@ -48,7 +57,7 @@ struct SaveGoalPage: View {
             }
             
             Block{
-                TextField("Enter Goal", text: $goaltext) {}
+                TextField("Enter Goal", text: $goalText) {}
                     .padding(8)
                     .font(.body)
                     .cornerRadius(10)
@@ -59,7 +68,7 @@ struct SaveGoalPage: View {
                     .padding(.top, 70)
                 
                 
-                TextField("Enter Description", text: $descriptiontext) {}
+                TextField("Enter Description", text: $goalDescription) {}
                     .padding(8)
                     .font(.body)
                     .cornerRadius(10)
@@ -81,7 +90,7 @@ struct SaveGoalPage: View {
                     switch selectedMeasurement {
                     case .sets:
                         TextField("Enter amount of sets", text: $setsAmount)
-                            .keyboardType(.decimalPad)
+                            .keyboardType(.numberPad)
                             .padding()
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.top, 20)
@@ -120,10 +129,22 @@ struct SaveGoalPage: View {
                 Spacer()
                 
                 Button(action: {
-                    if !goaltext.isEmpty && !descriptiontext.isEmpty {
-                        let newGoal = Goal(title: goaltext, description: descriptiontext)
-                        goals.append(newGoal)
-                        dismiss()
+                    if mode == .add {
+                        if isValid {
+                            viewModel.addGoal(title: goalText, description: goalDescription, setsAmount: setsAmount, repsAmount: repsAmount, volumeAmount: volumeAmount)
+                            dismiss()
+                        } else {
+                            
+                        }
+                    }
+                    
+                    if mode == .edit {
+                        if isValid {
+                            viewModel.editGoal(goal: selectedGoal, title: goalText, description: goalDescription, setsAmount: setsAmount, repsAmount: repsAmount, volumeAmount: volumeAmount)
+                            dismiss()
+                        } else {
+                            
+                        }
                     }
                 }) {
                     CustomButton(title: "Save")
@@ -136,14 +157,18 @@ struct SaveGoalPage: View {
             
             Spacer()
         }
-        
+        .navigationBarHidden(true)
         .onAppear {
-            goaltext = selectedGoal?.title ?? ""
-            descriptiontext = selectedGoal?.description ?? ""
+            goalText = selectedGoal?.title ?? ""
+            goalDescription = selectedGoal?.goalDescription ?? ""
+            setsAmount = selectedGoal?.setsAmount ?? ""
+            repsAmount = selectedGoal?.repsAmount ?? ""
+            volumeAmount = selectedGoal?.volumeAmount ?? ""
         }
     }
     
 }
 
 #Preview {
-    SaveGoalPage(goals: .constant([.init(title: "title", description: "description")]), selectedGoal: .constant(nil))}
+    SaveGoalPage(viewModel: GoalViewModel(), selectedGoal: .constant(nil), mode: .add)
+}
