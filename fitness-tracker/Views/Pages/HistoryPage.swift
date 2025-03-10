@@ -26,13 +26,15 @@ struct HistoryPage: View {
                         DatePicker("Start Date", selection: $date, displayedComponents: [.date])
                             .datePickerStyle(.graphical)
                             .onChange(of: date, initial: true) {
-                                self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
+                                self.viewModel.fetchWorkout(byDate: date.formatted(date: .numeric, time: .omitted))
                             }
                         
-                        ForEach(self.viewModel.workouts) { workout in
-                            WorkoutCard(viewModel: self.$viewModel, workout: workout)
+                        VStack {
+                            ForEach(self.viewModel.workouts) { workout in
+                                WorkoutCard(viewModel: self.$viewModel, workout: workout)
+                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
                 
@@ -40,6 +42,7 @@ struct HistoryPage: View {
         }
         .onAppear {
             self.viewModel.modelContext = self.modelContext
+            self.viewModel.fetchWorkout(byDate: date.formatted(date: .numeric, time: .omitted))
         }
     }
     
