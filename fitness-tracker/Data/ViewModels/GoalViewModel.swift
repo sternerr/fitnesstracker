@@ -15,6 +15,7 @@ class GoalViewModel {
     
     var goals: [GoalModel] = []
     
+    
     func fetchGoals() {
         self.goals = try! self.modelContext?.fetch(FetchDescriptor<GoalModel>()) ?? []
     }
@@ -40,5 +41,12 @@ class GoalViewModel {
         self.modelContext?.delete(goal)
         try? self.modelContext?.save()
         fetchGoals()
+    }
+    
+    func totalSum(for goal: GoalModel) -> Double {
+        let sets = Double(goal.setsAmount ?? "0") ?? 0
+        let reps = Double(goal.repsAmount ?? "0") ?? 0
+        let volume = Double(goal.volumeAmount ?? "0") ?? 0
+        return sets * reps * volume
     }
 }

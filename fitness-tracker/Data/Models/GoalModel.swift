@@ -15,13 +15,11 @@ class GoalModel: Identifiable, Hashable {
     var title: String
     var goalDescription: String
     
+
+    
     var setsAmount: String?
     var repsAmount: String?
     var volumeAmount: String?
-    
-    var totalSum: Double? {
-        (Double(setsAmount ?? "0") ?? 0) * (Double(repsAmount ?? "0") ?? 0) * (Double(volumeAmount ?? "0") ?? 0)
-    }
     
     init(id: UUID = UUID(), title: String, goalDescription: String, setsAmount: String? = nil, repsAmount: String? = nil, volumeAmount: String? = nil) {
         self.id = id
