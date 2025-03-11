@@ -20,7 +20,7 @@ struct ExerciseCard: View {
                         .font(.system(size: 20))
                     Spacer()
                     Button {
-//                        self.viewModel.addSet(for: exercise, set: SetModel())
+                        self.exerciseViewModel.add(set: SetModel())
                     } label: {
                         Image(systemName: "plus.app.fill")
                             .font(.system(size: 32))
@@ -31,6 +31,7 @@ struct ExerciseCard: View {
                 .background(.secondarySurfaceContainer)
             } action: {
                 self.viewModel.remove(evm: exerciseViewModel)
+                self.viewModel.remove(exerciseViewModel: exerciseViewModel)
             }
             
 //            if(self.exercise.sets.count > 0) {

@@ -13,7 +13,18 @@ import Foundation
 class ExerciseViewModel: Identifiable {
     var modelContext: ModelContext? = nil
     var exercise: ExerciseModel? = nil
-
+    var sets: [SetViewModel] = []
+    
+    func add(set: SetModel) {
+        let newSetWM = SetViewModel()
+        newSetWM.modelContext = self.modelContext
+        newSetWM.set = set
+        
+        
+        self.exercise?.sets.append(set)
+        self.sets.append(newSetWM)
+    }
+    
     func remove() {
         guard self.exercise != nil else { return }
         self.modelContext?.delete(self.exercise!)
