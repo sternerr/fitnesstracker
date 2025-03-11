@@ -53,8 +53,8 @@ struct HistoryPage: View {
         let exercise1 = ExerciseModel(name: "Pull Up")
         let exercise2 = ExerciseModel(name: "Push Up")
         
-        self.viewModel.addExercise(exercise: exercise1)
-        self.viewModel.addExercise(exercise: exercise2)
+        self.viewModel.add(exercise: exercise1)
+        self.viewModel.add(exercise: exercise2)
         
         self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
     }

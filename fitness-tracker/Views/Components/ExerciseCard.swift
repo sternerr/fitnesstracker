@@ -30,22 +30,21 @@ struct ExerciseCard: View {
                 .padding()
                 .background(.secondarySurfaceContainer)
             } action: {
-                self.viewModel.remove(evm: exerciseViewModel)
                 self.viewModel.remove(exerciseViewModel: exerciseViewModel)
             }
             
-//            if(self.exercise.sets.count > 0) {
-//                VStack {
-//                    ForEach(self.exercise.sets) { set in
-//                        SwipeToDelete {
-//                            SetView(set: set, index: self.exercise.sets.firstIndex(where: { $0 == set }) ?? 0)
-//                        } action: {
-//                            self.viewModel.removeSet(for: exercise, set: set)
-//                        }
-//                    }
-//                }
-//                .padding(.bottom, 8)
-//            }
+            if(self.exerciseViewModel.sets.count > 0) {
+                VStack {
+                    ForEach(self.exerciseViewModel.sets) { svm in
+                        SwipeToDelete {
+                            SetView(setViewModel: svm, index: self.exerciseViewModel.sets.firstIndex(where: { $0.set == svm.set! }) ?? 0)
+                        } action: {
+                            self.exerciseViewModel.remove(setViewModel: svm)
+                        }
+                    }
+                }
+                .padding(.bottom, 8)
+            }
         }
         .background(.secondarySurfaceContainer)
     }

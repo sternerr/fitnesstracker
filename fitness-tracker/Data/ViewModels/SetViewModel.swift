@@ -10,4 +10,9 @@ import SwiftData
 class SetViewModel: Identifiable {
     var modelContext: ModelContext? = nil
     var set: SetModel? = nil
+    
+    func remove() {
+        guard self.set != nil else { return }
+        self.modelContext?.delete(self.set!)
+    }
 }

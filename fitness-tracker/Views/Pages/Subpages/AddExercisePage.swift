@@ -48,7 +48,7 @@ struct AddExercisePage: View {
                     Button {
                             let exercise = ExerciseModel(name: text)
                         
-                            self.viewModel.addExercise(exercise: exercise)
+                            self.viewModel.add(exercise: exercise)
                             self.dismiss()
                     } label: {
                         CustomButton(title: "Create Exercise")
@@ -59,7 +59,7 @@ struct AddExercisePage: View {
                             Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
-                                    self.viewModel.addExercise(exercise: ExerciseModel(name: e.value))
+                                    self.viewModel.add(exercise: ExerciseModel(name: e.value))
                                     self.dismiss()
                                 }
                         }
@@ -71,10 +71,6 @@ struct AddExercisePage: View {
                 Spacer()
             }
         }
-        .onAppear {
-//            self.exerciseViewModel.modelContext = modelContext
-        }
-        
     }
     
     private func filter(suggestions: [Suggestions.Suggestion], filter: String) -> [Suggestions.Suggestion] {

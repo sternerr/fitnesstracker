@@ -36,7 +36,7 @@ class WorkoutViewModel {
         })))?.first ?? nil
     }
     
-    func addExercise(exercise: ExerciseModel) {
+    func add(exercise: ExerciseModel) {
         let newExercieVM = ExerciseViewModel()
         newExercieVM.modelContext = self.modelContext
         newExercieVM.exercise = exercise
@@ -46,14 +46,12 @@ class WorkoutViewModel {
         self.exercises.append(newExercieVM)
     }
     
-    func addSet(for exercise: ExerciseModel, set: SetModel) {
-        exercise.sets.append(set)
-    }
-    
-    func saveWorkout(for workout: WorkoutModel, name: String?, state: String?, date: String?) {
-        workout.name = name ?? workout.name
-        workout.state = state ?? workout.state
-        workout.date = date ?? workout.date
+    func save(name: String?, state: String?, date: String?) {
+        guard self.workout != nil else { return }
+        
+        self.workout!.name = name ?? self.workout!.name
+        self.workout!.state = state ?? self.workout!.state
+        self.workout!.date = date ?? self.workout!.date
     }
     
     func remove() {
@@ -66,14 +64,9 @@ class WorkoutViewModel {
         self.exercises = []
     }
         
-    func remove(evm: ExerciseViewModel) {
-        evm.remove()
-        self.exercises.removeAll(where: { $0.exercise?.id == evm.exercise?.id })
-    }
-    
-    func removeSet(for exercise: ExerciseModel, set: SetModel) {
-        exercise.sets.removeAll(where: { $0.id == set.id })
-        self.modelContext?.delete(set)
+    func remove(exerciseViewModel: ExerciseViewModel) {
+        exerciseViewModel.remove()
+        self.exercises.removeAll(where: { $0.exercise?.id == exerciseViewModel.exercise?.id })
     }
     
     func getExerciseCount(for workout: WorkoutModel) -> Int {

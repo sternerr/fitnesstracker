@@ -63,6 +63,7 @@ struct AddWorkoutPage: View {
             self.viewModel.modelContext = self.modelContext
             
             if(self.viewModel.workout == nil ) {
+            
                 self.viewModel.addWorkout()
             }
         }
@@ -72,8 +73,8 @@ struct AddWorkoutPage: View {
         let exercise1 = ExerciseModel(name: "Pull Up")
         let exercise2 = ExerciseModel(name: "Pull Up")
         
-        self.viewModel.addExercise(exercise: exercise1)
-        self.viewModel.addExercise(exercise: exercise2)
+        self.viewModel.add(exercise: exercise1)
+        self.viewModel.add(exercise: exercise2)
     }
 }
 

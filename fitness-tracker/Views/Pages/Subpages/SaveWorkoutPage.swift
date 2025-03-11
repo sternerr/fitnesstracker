@@ -45,8 +45,7 @@ struct SaveWorkoutPage: View {
                 
                 Button(action: {
                     if(!self.text.isEmpty) {
-                        self.viewModel.saveWorkout(
-                            for: self.viewModel.workouts[0],
+                        self.viewModel.save(
                             name: self.text,
                             state: "saved",
                             date: Date.now.formatted(date: .numeric, time: .omitted)

@@ -29,4 +29,9 @@ class ExerciseViewModel: Identifiable {
         guard self.exercise != nil else { return }
         self.modelContext?.delete(self.exercise!)
     }
+    
+    func remove(setViewModel: SetViewModel) {
+        setViewModel.remove()
+        self.sets.removeAll(where: { $0.set?.id == setViewModel.set?.id })
+    }
 }
