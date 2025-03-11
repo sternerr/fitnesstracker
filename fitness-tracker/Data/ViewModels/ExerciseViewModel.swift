@@ -13,4 +13,9 @@ import Foundation
 class ExerciseViewModel: Identifiable {
     var modelContext: ModelContext? = nil
     var exercise: ExerciseModel? = nil
+
+    func remove() {
+        guard self.exercise != nil else { return }
+        self.modelContext?.delete(self.exercise!)
+    }
 }

@@ -38,6 +38,7 @@ class WorkoutViewModel {
     
     func addExercise(exercise: ExerciseModel) {
         let newExercieVM = ExerciseViewModel()
+        newExercieVM.modelContext = self.modelContext
         newExercieVM.exercise = exercise
         
         
@@ -64,10 +65,10 @@ class WorkoutViewModel {
         })))?.first ?? nil
         self.exercises = []
     }
-
-    func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
-        workout.exercises.removeAll(where: { $0.id == exercise.id })
-        self.modelContext?.delete(exercise)
+        
+    func remove(evm: ExerciseViewModel) {
+        evm.remove()
+        self.exercises.removeAll(where: { $0.exercise?.id == evm.exercise?.id })
     }
     
     func removeSet(for exercise: ExerciseModel, set: SetModel) {

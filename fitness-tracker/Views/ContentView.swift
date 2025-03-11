@@ -11,8 +11,8 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
-        
-    @Query private var exercises: [ExerciseModel]
+   
+    @State var viewModel = WorkoutViewModel()
     
     @State var selectedTab: Int = 0
     

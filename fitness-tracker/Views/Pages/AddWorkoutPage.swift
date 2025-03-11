@@ -10,8 +10,8 @@ import SwiftData
 
 struct AddWorkoutPage: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var viewModel = WorkoutViewModel()
     
+    @State private var viewModel: WorkoutViewModel = WorkoutViewModel()
     @Binding var selectedTab: Int
     
     var body: some View {
@@ -44,7 +44,7 @@ struct AddWorkoutPage: View {
                     Block {
                         ScrollView {
                             ForEach(self.viewModel.exercises) { evm in
-                                ExerciseCard(viewModel: evm)
+                                ExerciseCard(viewModel: self.$viewModel, exerciseViewModel: evm )
                             }
                             
                             NavigationLink(
@@ -62,7 +62,7 @@ struct AddWorkoutPage: View {
         .onAppear {
             self.viewModel.modelContext = self.modelContext
             
-            if(self.viewModel.workouts.count <= 0 ) {
+            if(self.viewModel.workout == nil ) {
                 self.viewModel.addWorkout()
             }
         }

@@ -9,13 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct ExerciseCard: View {
-    @State var viewModel: ExerciseViewModel
+    @Binding var viewModel: WorkoutViewModel
+    @State var exerciseViewModel: ExerciseViewModel
     
     var body: some View {
         VStack {
             SwipeToDelete {
                 HStack {
-                    Text(self.viewModel.exercise!.name)
+                    Text(self.exerciseViewModel.exercise!.name)
                         .font(.system(size: 20))
                     Spacer()
                     Button {
@@ -29,7 +30,7 @@ struct ExerciseCard: View {
                 .padding()
                 .background(.secondarySurfaceContainer)
             } action: {
-//                self.viewModel.removeExercise(for: self.viewModel.workouts[0], exercise: exercise)
+                self.viewModel.remove(evm: exerciseViewModel)
             }
             
 //            if(self.exercise.sets.count > 0) {
