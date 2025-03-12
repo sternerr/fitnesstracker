@@ -33,11 +33,11 @@ struct ExerciseCard: View {
                 self.workoutViewModel.remove(exerciseViewModel: self.exerciseViewModel)
             }
             
-            if(self.exerciseViewModel.sets.count > 0) {
+            if(self.exerciseViewModel.setViewModels.count > 0) {
                 VStack {
-                    ForEach(self.exerciseViewModel.sets) { svm in
+                    ForEach(self.exerciseViewModel.setViewModels) { svm in
                         SwipeToDelete {
-                            SetView(setViewModel: svm, index: self.exerciseViewModel.sets.firstIndex(where: { $0.set == svm.set! }) ?? 0)
+                            SetView(setViewModel: svm, index: self.exerciseViewModel.setViewModels.firstIndex(where: { $0.set == svm.set! }) ?? 0)
                         } action: {
                             self.exerciseViewModel.remove(setViewModel: svm)
                         }
@@ -47,6 +47,9 @@ struct ExerciseCard: View {
             }
         }
         .background(.secondarySurfaceContainer)
+        .onAppear {
+            self.exerciseViewModel.fetchSets()
+        }
     }
 }
 

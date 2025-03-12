@@ -12,7 +12,6 @@ import Observation
 @Observable
 class WorkoutViewModel: Identifiable {
     var modelContext: ModelContext? = nil
-    var workouts: [WorkoutModel] = []
     var workout: WorkoutModel?
     var exerciseViewModels: [ExerciseViewModel] = []
         
@@ -21,12 +20,15 @@ class WorkoutViewModel: Identifiable {
         self.workout = workout
     }
     
-    func fetchWorkout(byState state: String) {
-        self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
-            $0.state == state
-        }))) ?? []
+    func fetchExercises() {
+        guard let modelContext = self.modelContext else { return }
+        guard let workout = self.workout else { return }
+        
+        self.exerciseViewModels = workout.exercises.map {
+            ExerciseViewModel(exercise: $0, modelContext: modelContext)
+        }
     }
-    
+
     func addWorkout() {
         self.modelContext?.insert(WorkoutModel())
         

@@ -13,7 +13,21 @@ import Foundation
 class ExerciseViewModel: Identifiable {
     var modelContext: ModelContext? = nil
     var exercise: ExerciseModel? = nil
-    var sets: [SetViewModel] = []
+    var setViewModels: [SetViewModel] = []
+   
+    init(exercise: ExerciseModel? = nil, modelContext: ModelContext? = nil) {
+        self.exercise = exercise
+        self.modelContext = modelContext
+    }
+    
+    func fetchSets() {
+        guard let modelContext = self.modelContext else { return }
+        guard let exercise = self.exercise else { return }
+        
+        self.setViewModels = exercise.sets.map {
+            SetViewModel(set: $0, modelContext: modelContext)
+        }
+    }
     
     func add(set: SetModel) {
         let newSetWM = SetViewModel()
@@ -22,7 +36,7 @@ class ExerciseViewModel: Identifiable {
         
         
         self.exercise?.sets.append(set)
-        self.sets.append(newSetWM)
+        self.setViewModels.append(newSetWM)
     }
     
     func remove() {
@@ -32,6 +46,6 @@ class ExerciseViewModel: Identifiable {
     
     func remove(setViewModel: SetViewModel) {
         setViewModel.remove()
-        self.sets.removeAll(where: { $0.set?.id == setViewModel.set?.id })
+        self.setViewModels.removeAll(where: { $0.set?.id == setViewModel.set?.id })
     }
 }

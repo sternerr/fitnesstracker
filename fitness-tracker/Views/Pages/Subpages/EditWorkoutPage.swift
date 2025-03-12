@@ -34,5 +34,8 @@ struct EditWorkoutPage: View {
                 }
             }
         }
+        .onAppear {
+            self.viewModel.fetchExercises()
+        }
     }
 }
