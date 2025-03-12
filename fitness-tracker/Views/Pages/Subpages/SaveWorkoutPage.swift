@@ -40,8 +40,7 @@ struct SaveWorkoutPage: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(.secondarySurfaceContainer, lineWidth: 2)
                     )
-                DatePicker("Workout date", selection: $date, displayedComponents: [.date])
-                    .datePickerStyle(CompactDatePickerStyle())
+
                 Spacer()
                     .frame(minHeight: 128, maxHeight: 128)
                 
