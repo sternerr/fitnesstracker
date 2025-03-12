@@ -9,8 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ExerciseCard: View {
-    @Binding var viewModel: WorkoutViewModel
     @State var exerciseViewModel: ExerciseViewModel
+    @Binding var workoutViewModel: WorkoutViewModel
     
     var body: some View {
         VStack {
@@ -30,7 +30,7 @@ struct ExerciseCard: View {
                 .padding()
                 .background(.secondarySurfaceContainer)
             } action: {
-                self.viewModel.remove(exerciseViewModel: exerciseViewModel)
+                self.workoutViewModel.remove(exerciseViewModel: self.exerciseViewModel)
             }
             
             if(self.exerciseViewModel.sets.count > 0) {

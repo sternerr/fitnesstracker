@@ -9,17 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct WorkoutCard: View {
-    @Binding var viewModel: WorkoutViewModel
-    @State var workout: WorkoutModel
+    @State var viewModel: WorkoutViewModel
     
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                    Text(workout.name)
+                    Text(self.viewModel.workout!.name)
                     Spacer()
                     NavigationLink {
-                        EditWorkoutPage(viewModel: self.$viewModel, workout: workout)
+                        EditWorkoutPage(viewModel: self.$viewModel)
                             .navigationBarHidden(true)
                     } label: {
                         Image(systemName: "pencil.circle.fill")
@@ -30,23 +29,23 @@ struct WorkoutCard: View {
                 HStack {
                     VStack{
                         Text("Volume")
-                        Text("\(self.viewModel.getVolume(for: self.workout))")
+                        Text("\(self.viewModel.getVolume(for: self.viewModel.workout!))")
                     }
                     
                     Spacer()
                     VStack{
                         Text("Reps")
-                        Text("\(self.viewModel.getRepsCount(for: self.workout))")
+                        Text("\(self.viewModel.getRepsCount(for: self.viewModel.workout!))")
                     }
                     Spacer()
                     VStack{
                         Text("Sets")
-                        Text("\(self.viewModel.getSetsCount(for: self.workout))")
+                        Text("\(self.viewModel.getSetsCount(for: self.viewModel.workout!))")
                     }
                     Spacer()
                     VStack{
                         Text("Exercises")
-                        Text("\(self.viewModel.getExerciseCount(for: self.workout))")
+                        Text("\(self.viewModel.getExerciseCount(for: self.viewModel.workout!))")
                     }
                 }
             }

@@ -10,7 +10,7 @@ import SwiftData
 
 struct HistoryPage: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var viewModel: WorkoutViewModel = WorkoutViewModel()
+    @State private var viewModel: ViewModel = ViewModel()
     
     @State private var date = Date()
     
@@ -26,11 +26,11 @@ struct HistoryPage: View {
                         DatePicker("Start Date", selection: $date, displayedComponents: [.date])
                             .datePickerStyle(.graphical)
                             .onChange(of: date, initial: true) {
-                                self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
+                                self.viewModel.fetch(byDate: DateToString(date: self.date).result)
                             }
                         
-                        ForEach(self.viewModel.workouts) { workout in
-                            WorkoutCard(viewModel: self.$viewModel, workout: workout)
+                        ForEach(self.viewModel.workoutViewModels) { wvm in
+                            WorkoutCard(viewModel: wvm)
                         }
                         .padding(.vertical, 4)
                     }
@@ -41,22 +41,6 @@ struct HistoryPage: View {
         .onAppear {
             self.viewModel.modelContext = self.modelContext
         }
-    }
-    
-    func sampleData() {
-        self.viewModel.addWorkout()
-        
-        self.viewModel.workouts[0].name = "Workout 1"
-        self.viewModel.workouts[0].state = "saved"
-        self.viewModel.workouts[0].date = "2025-03-01"
-        
-        let exercise1 = ExerciseModel(name: "Pull Up")
-        let exercise2 = ExerciseModel(name: "Push Up")
-        
-        self.viewModel.add(exercise: exercise1)
-        self.viewModel.add(exercise: exercise2)
-        
-        self.viewModel.fetchWorkout(byDate: DateToString(date: self.date).result)
     }
 }
 

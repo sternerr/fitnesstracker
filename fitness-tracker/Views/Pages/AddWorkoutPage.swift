@@ -43,8 +43,8 @@ struct AddWorkoutPage: View {
                     
                     Block {
                         ScrollView {
-                            ForEach(self.viewModel.exercises) { evm in
-                                ExerciseCard(viewModel: self.$viewModel, exerciseViewModel: evm )
+                            ForEach(self.viewModel.exerciseViewModels) { evm in
+                                ExerciseCard(exerciseViewModel: evm, workoutViewModel: self.$viewModel)
                             }
                             
                             NavigationLink(

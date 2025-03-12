@@ -10,21 +10,20 @@ import SwiftUI
 import Observation
 
 @Observable
-class WorkoutViewModel {
+class WorkoutViewModel: Identifiable {
     var modelContext: ModelContext? = nil
     var workouts: [WorkoutModel] = []
-    var workout: WorkoutModel? = nil
-    var exercises: [ExerciseViewModel] = []
+    var workout: WorkoutModel?
+    var exerciseViewModels: [ExerciseViewModel] = []
+        
+    init(workout: WorkoutModel? = nil, modelContext: ModelContext? = nil) {
+        self.modelContext = modelContext
+        self.workout = workout
+    }
     
     func fetchWorkout(byState state: String) {
         self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
             $0.state == state
-        }))) ?? []
-    }
-    
-    func fetchWorkout(byDate date: String) {
-        self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
-            $0.date == date
         }))) ?? []
     }
     
@@ -43,7 +42,7 @@ class WorkoutViewModel {
         
         
         self.workout?.exercises.append(exercise)
-        self.exercises.append(newExercieVM)
+        self.exerciseViewModels.append(newExercieVM)
     }
     
     func save(name: String?, state: String?, date: String?) {
@@ -61,12 +60,12 @@ class WorkoutViewModel {
         self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
             $0.state == ""
         })))?.first ?? nil
-        self.exercises = []
+        self.exerciseViewModels = []
     }
         
     func remove(exerciseViewModel: ExerciseViewModel) {
         exerciseViewModel.remove()
-        self.exercises.removeAll(where: { $0.exercise?.id == exerciseViewModel.exercise?.id })
+        self.exerciseViewModels.removeAll(where: { $0.exercise?.id == exerciseViewModel.exercise?.id })
     }
     
     func getExerciseCount(for workout: WorkoutModel) -> Int {
