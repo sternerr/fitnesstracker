@@ -22,7 +22,7 @@ struct ContentView: View {
             Dashboard()
                 .tabItem {
                     Image(systemName: "house.fill")
-                    Text("Dashboa")
+                    Text("Dashboard")
                 }
                 .tag(0)
             

@@ -32,7 +32,6 @@ struct HistoryPage: View {
                         ForEach(self.viewModel.workoutViewModels) { wvm in
                             WorkoutCard(viewModel: wvm)
                         }
-                        .padding(.vertical, 4)
                     }
                 }
                 
@@ -40,6 +39,7 @@ struct HistoryPage: View {
         }
         .onAppear {
             self.viewModel.modelContext = self.modelContext
+            self.viewModel.fetch(byDate: date.formatted(date: .numeric, time: .omitted))
         }
     }
 }

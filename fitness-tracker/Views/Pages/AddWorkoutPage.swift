@@ -46,15 +46,15 @@ struct AddWorkoutPage: View {
                             ForEach(self.viewModel.exerciseViewModels) { evm in
                                 ExerciseCard(exerciseViewModel: evm, workoutViewModel: self.$viewModel)
                             }
-                            
-                            NavigationLink(
-                                destination: AddExercisePage(viewModel: self.$viewModel)
-                                    .navigationBarHidden(true)
-                            ){
-                                CustomButton(title: "Add Exercise")
-                            }
-                            .padding(.vertical)
                         }
+                        
+                        NavigationLink(
+                            destination: AddExercisePage(viewModel: self.$viewModel)
+                                .navigationBarHidden(true)
+                        ){
+                            CustomButton(title: "Add Exercise")
+                        }
+                        .padding(.vertical)
                     }
                 }
             }
