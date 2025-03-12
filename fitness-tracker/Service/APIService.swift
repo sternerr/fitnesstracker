@@ -11,7 +11,7 @@ import Foundation
 
 
 struct Suggestions: Codable {
-    let suggestions: [Suggestion]  // Notice the plural "suggestions" instead of "suggestion"
+    let suggestions: [Suggestion]
     
     struct Suggestion: Codable, Hashable {
         let value: String
@@ -36,6 +36,16 @@ class APIService {
         }
         
         return Suggestions(suggestions: [])
+    }
+    
+    func filter(suggestions: [Suggestions.Suggestion], filter: String) -> [Suggestions.Suggestion] {
+        if(filter.isEmpty) {
+            return suggestions
+        }
+        
+        return suggestions.filter {
+            $0.value.localizedCaseInsensitiveContains(filter)
+        }
     }
     
     private func JSONfrom(data: Data) -> Suggestions {

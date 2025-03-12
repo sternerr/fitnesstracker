@@ -68,14 +68,6 @@ struct AddWorkoutPage: View {
             }
         }
     }
-    
-    func sampleData() {
-        let exercise1 = ExerciseModel(name: "Pull Up")
-        let exercise2 = ExerciseModel(name: "Pull Up")
-        
-        self.viewModel.add(exercise: exercise1)
-        self.viewModel.add(exercise: exercise2)
-    }
 }
 
 #Preview {

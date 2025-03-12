@@ -70,11 +70,14 @@ class WorkoutViewModel: Identifiable {
         self.exerciseViewModels.removeAll(where: { $0.exercise?.id == exerciseViewModel.exercise?.id })
     }
     
-    func getExerciseCount(for workout: WorkoutModel) -> Int {
+    func getExerciseCount() -> Int {
+        guard let workout = self.workout else { return 0 }
         return workout.exercises.count
     }
     
-    func getSetsCount(for workout: WorkoutModel) -> Int {
+    func getSetsCount() -> Int {
+        guard let workout = self.workout else { return 0 }
+        
         var count: Int = 0
         
         workout.exercises.forEach {
@@ -84,7 +87,8 @@ class WorkoutViewModel: Identifiable {
         return count
     }
     
-    func getRepsCount(for workout: WorkoutModel) -> Int {
+    func getRepsCount() -> Int {
+        guard let workout = self.workout else { return 0 }
         var count: Int = 0
         
         workout.exercises.forEach {
@@ -96,7 +100,8 @@ class WorkoutViewModel: Identifiable {
         return count
     }
     
-    func getVolume(for workout: WorkoutModel) -> Int {
+    func getVolume() -> Int {
+        guard let workout = self.workout else { return 0 }
         var volume: Int = 0
         
         workout.exercises.forEach {

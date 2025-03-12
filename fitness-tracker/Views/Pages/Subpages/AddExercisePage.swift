@@ -55,7 +55,7 @@ struct AddExercisePage: View {
                     }
                 } else {
                     List {
-                        ForEach(self.filter(suggestions: self.exer.suggestions, filter: text), id: \.self) { e in
+                        ForEach(APIService.shared.filter(suggestions: self.exer.suggestions, filter: text), id: \.self) { e in
                             Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
@@ -73,15 +73,7 @@ struct AddExercisePage: View {
         }
     }
     
-    private func filter(suggestions: [Suggestions.Suggestion], filter: String) -> [Suggestions.Suggestion] {
-        if(filter.isEmpty) {
-            return suggestions
-        }
-        
-        return suggestions.filter {
-            $0.value.localizedCaseInsensitiveContains(filter)
-        }
-    }
+    
 }
 
 #Preview {

@@ -29,23 +29,23 @@ struct WorkoutCard: View {
                 HStack {
                     VStack{
                         Text("Volume")
-                        Text("\(self.viewModel.getVolume(for: self.viewModel.workout!))")
+                        Text("\(self.viewModel.getVolume())")
                     }
                     
                     Spacer()
                     VStack{
                         Text("Reps")
-                        Text("\(self.viewModel.getRepsCount(for: self.viewModel.workout!))")
+                        Text("\(self.viewModel.getRepsCount())")
                     }
                     Spacer()
                     VStack{
                         Text("Sets")
-                        Text("\(self.viewModel.getSetsCount(for: self.viewModel.workout!))")
+                        Text("\(self.viewModel.getSetsCount())")
                     }
                     Spacer()
                     VStack{
                         Text("Exercises")
-                        Text("\(self.viewModel.getExerciseCount(for: self.viewModel.workout!))")
+                        Text("\(self.viewModel.getExerciseCount())")
                     }
                 }
             }
