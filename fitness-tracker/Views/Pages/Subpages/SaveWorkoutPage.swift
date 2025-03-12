@@ -53,6 +53,7 @@ struct SaveWorkoutPage: View {
                         )
                         
                         self.viewModel.addWorkout()
+                        self.viewModel.fetchExercises()
                         self.dismiss()
                     }
                 }) {
