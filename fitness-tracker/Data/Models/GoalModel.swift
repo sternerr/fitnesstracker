@@ -7,26 +7,20 @@
 
 import SwiftData
 import Foundation
-
+    
 @Model
-
-class GoalModel: Identifiable, Hashable {
-    var id: UUID
+class GoalModel: Identifiable {
     var title: String
     var goalDescription: String
+    var measurement: String
+    var amount: Int
+    var exercise: String
     
-
-    
-    var setsAmount: String?
-    var repsAmount: String?
-    var volumeAmount: String?
-    
-    init(id: UUID = UUID(), title: String, goalDescription: String, setsAmount: String? = nil, repsAmount: String? = nil, volumeAmount: String? = nil) {
-        self.id = id
+    init(title: String, goalDescription: String, amount: Int, measurement: String, exercise: String) {
         self.title = title
         self.goalDescription = goalDescription
-        self.setsAmount = setsAmount
-        self.repsAmount = repsAmount
-        self.volumeAmount = volumeAmount
+        self.measurement = measurement
+        self.amount = amount
+        self.exercise = exercise
     }
 }

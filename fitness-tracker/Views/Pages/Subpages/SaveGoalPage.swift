@@ -6,29 +6,19 @@
 //
 
 import SwiftUI
-import Combine
 
 struct SaveGoalPage: View {
-    
     @Environment(\.dismiss) var dismiss
-    @Environment(\.presentationMode) private var presentationMode
 
-    var viewModel: GoalViewModel
-    @Binding var selectedGoal: GoalModel?
+    @Binding var viewModel: GoalPageViewModel
+    @Binding var goalViewModel: GoalViewModel?
     
-    @State private var goalText: String = ""
-    @State private var goalDescription: String = ""
-    @State private var setsAmount: String = ""
-    @State private var repsAmount: String = ""
-    @State private var volumeAmount: String = ""
+    @State private var title: String = ""
+    @State private var description: String = ""
+    @State private var amount: String = ""
+    @State private var exercise: String = ""
     
     @State private var selectedMeasurement: MeasurementType = .sets
-    
-    let mode: Mode
-    
-    enum Mode {
-        case add, edit
-    }
     
     enum MeasurementType: String, CaseIterable, Identifiable {
         case sets = "Sets"
@@ -38,15 +28,14 @@ struct SaveGoalPage: View {
         var id: String { self.rawValue }
     }
     
-    var isValid:  Bool {
-        //Case 1
-        (!goalText.isEmpty && !goalDescription.isEmpty && !setsAmount.isEmpty && !repsAmount.isEmpty && !volumeAmount.isEmpty) ||
-        //Case 2
-        (!goalText.isEmpty && !goalDescription.isEmpty && setsAmount.isEmpty && repsAmount.isEmpty && volumeAmount.isEmpty)
+    var isValid: Bool {
+        (!title.isEmpty && !description.isEmpty && amount != "") ||
+        (!title.isEmpty && !description.isEmpty && amount != "")
     }
     
     var body: some View {
         Container {
+            
             Block {
                 TopBar(text: "Goals") {
                     Image(systemName: "arrow.backward.square.fill")
@@ -60,7 +49,7 @@ struct SaveGoalPage: View {
             }
             
             Block{
-                TextField("Enter Goal", text: $goalText) {}
+                TextField("Enter Goal", text: $title)
                     .padding(8)
                     .font(.body)
                     .cornerRadius(10)
@@ -70,8 +59,7 @@ struct SaveGoalPage: View {
                 
                     .padding(.top, 70)
                 
-                
-                TextField("Enter Description", text: $goalDescription) {}
+                TextField("Enter Description", text: $description)
                     .padding(8)
                     .font(.body)
                     .cornerRadius(10)
@@ -89,89 +77,63 @@ struct SaveGoalPage: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.top, 20)
                 
-                Group {
-                    switch selectedMeasurement {
-                    case .sets:
-                        TextField("Enter amount of sets", text: $setsAmount)
-                            .keyboardType(.numberPad)
-                            .padding()
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.top, 20)
-                            .onReceive(Just(setsAmount)) { newValue in
-                                let filtered = newValue.filter { "0123456789".contains($0) }
-                                if filtered != newValue {
-                                    self.setsAmount = filtered
-                                }
-                            }
-                    case .reps:
-                        TextField("Enter amount of reps", text: $repsAmount)
-                            .keyboardType(.numberPad)
-                            .padding()
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.top, 20)
-                            .onReceive(Just(repsAmount)) { newValue in
-                                let filtered = newValue.filter { "0123456789".contains($0) }
-                                if filtered != newValue {
-                                    self.repsAmount = filtered
-                                }
-                            }
-                    case .volume:
-                        TextField("Enter amount of volume", text: $volumeAmount)
-                            .keyboardType(.decimalPad)
-                            .padding()
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.top, 20)
-                            .onReceive(Just(volumeAmount)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    self.volumeAmount = filtered
-                                }
-                            }
-                    }
-                }
-                Spacer()
-                
-                Button(action: {
-                    if mode == .add {
-                        if isValid {
-                            viewModel.addGoal(title: goalText, description: goalDescription, setsAmount: setsAmount, repsAmount: repsAmount, volumeAmount: volumeAmount)
-                            dismiss()
-                        } else {
-                            
-                        }
-                    }
-                    
-                    if mode == .edit {
-                        if isValid {
-                            viewModel.editGoal(goal: selectedGoal, title: goalText, description: goalDescription, setsAmount: setsAmount, repsAmount: repsAmount, volumeAmount: volumeAmount)
-                            dismiss()
-                        } else {
-                            
-                        }
-                    }
-                }) {
-                    CustomButton(title: "Save")
-                }
-                .opacity(isValid ? 1 : 0.5)
-                
-                Spacer()
-                
+                TextField("Enter Amount", text: self.$amount)
+                    .padding(8)
+                    .font(.body)
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.secondarySurfaceContainer, lineWidth: 2)
+                    )
+                    .padding(.top, 40)
+                    .keyboardType(.numberPad)
             }
+
+            List {
+                NavigationLink {
+                    AddExercisePage2(exercise: self.$exercise)
+                } label: {
+                    Text("Choose Exercise")
+                        .padding(.vertical)
+                }
+                
+                if(!self.exercise.isEmpty) {
+                    Text(self.exercise)
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .scrollDisabled(true)
             
             Spacer()
+            
+            Button(action: {
+                if(self.isValid) {
+                    if(self.goalViewModel != nil) {
+                        self.goalViewModel!.save(title: title, description: description, amount: Int(amount), exercise: exercise)
+                    } else {
+                        self.viewModel.addGoal(goal:
+                            GoalModel(title: self.title, goalDescription: self.description, amount: Int(self.amount)!, measurement: self.selectedMeasurement.rawValue, exercise: exercise)
+                        )
+                    }
+                    
+                    self.dismiss()
+                }
+            }) {
+                CustomButton(title: "Save")
+            }
+            .opacity(isValid ? 1 : 0.5)
+            
+            Spacer()
+            
         }
-        .navigationBarHidden(true)
         .onAppear {
-            goalText = selectedGoal?.title ?? ""
-            goalDescription = selectedGoal?.goalDescription ?? ""
-            setsAmount = selectedGoal?.setsAmount ?? ""
-            repsAmount = selectedGoal?.repsAmount ?? ""
-            volumeAmount = selectedGoal?.volumeAmount ?? ""
+            if(self.goalViewModel != nil) {
+                self.title = self.goalViewModel!.goal!.title
+                self.description = self.goalViewModel!.goal!.goalDescription
+                self.amount = self.goalViewModel!.goal!.goalDescription
+                self.exercise = self.goalViewModel!.goal!.exercise
+            }
         }
     }
-    
 }
 
-#Preview {
-    SaveGoalPage(viewModel: GoalViewModel(), selectedGoal: .constant(nil), mode: .add)
-}
