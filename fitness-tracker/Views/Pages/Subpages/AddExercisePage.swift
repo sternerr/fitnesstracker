@@ -13,13 +13,10 @@ struct AddExercisePage: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var viewModel: WorkoutViewModel
-    @State var exerciseViewModel: ExerciseViewModel = ExerciseViewModel()
+    
+    @State var exer: Suggestions = Suggestions(suggestions: [])
     
     @State private var text: String = ""
-    
-    @Query(filter: #Predicate<ExerciseModel> {
-        $0.workout == nil
-    }) private var exercises: [ExerciseModel]
     
     var body: some View {
         Container {
@@ -40,26 +37,29 @@ struct AddExercisePage: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(.secondarySurfaceContainer, lineWidth: 2)
                         )
+                        .onChange(of: text, initial: false) {
+                            Task {
+                                self.exer = await APIService.shared.fetchExercises(withFilter: text)
+                            }
+                        }
                 }
                 
-                if(self.exerciseViewModel.filterExercises(exercises: self.exerciseViewModel.exercises, filter: self.text).count <= 0) {
+                if(self.exer.suggestions.count <= 0  && !text.isEmpty) {
                     Button {
-                        if(!text.isEmpty) {
                             let exercise = ExerciseModel(name: text)
-                            self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: exercise)
-                            self.viewModel.modelContext?.insert(ExerciseModel(name: text))
+                        
+                            self.viewModel.add(exercise: exercise)
                             self.dismiss()
-                        }
                     } label: {
                         CustomButton(title: "Create Exercise")
                     }
                 } else {
                     List {
-                        ForEach(self.exerciseViewModel.filterExercises(exercises: self.exerciseViewModel.exercises, filter: self.text)) { e in
-                            Text(e.name)
+                        ForEach(self.filter(suggestions: self.exer.suggestions, filter: text), id: \.self) { e in
+                            Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
-                                    self.viewModel.addExercise(for: self.viewModel.workouts[0], exercise: ExerciseModel(name: e.name))
+                                    self.viewModel.add(exercise: ExerciseModel(name: e.value))
                                     self.dismiss()
                                 }
                         }
@@ -71,9 +71,15 @@ struct AddExercisePage: View {
                 Spacer()
             }
         }
-        .onAppear {
-            self.exerciseViewModel.modelContext = modelContext
-            self.exerciseViewModel.fetchExercise()
+    }
+    
+    private func filter(suggestions: [Suggestions.Suggestion], filter: String) -> [Suggestions.Suggestion] {
+        if(filter.isEmpty) {
+            return suggestions
+        }
+        
+        return suggestions.filter {
+            $0.value.localizedCaseInsensitiveContains(filter)
         }
     }
 }

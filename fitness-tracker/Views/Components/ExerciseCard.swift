@@ -9,18 +9,18 @@ import SwiftUI
 import SwiftData
 
 struct ExerciseCard: View {
-    @Binding var viewModel: WorkoutViewModel
-    @State var exercise: ExerciseModel
+    @State var exerciseViewModel: ExerciseViewModel
+    @Binding var workoutViewModel: WorkoutViewModel
     
     var body: some View {
         VStack {
             SwipeToDelete {
                 HStack {
-                    Text(self.exercise.name)
+                    Text(self.exerciseViewModel.exercise!.name)
                         .font(.system(size: 20))
                     Spacer()
                     Button {
-                        self.viewModel.addSet(for: exercise, set: SetModel())
+                        self.exerciseViewModel.add(set: SetModel())
                     } label: {
                         Image(systemName: "plus.app.fill")
                             .font(.system(size: 32))
@@ -30,16 +30,16 @@ struct ExerciseCard: View {
                 .padding()
                 .background(.secondarySurfaceContainer)
             } action: {
-                self.viewModel.removeExercise(for: self.viewModel.workouts[0], exercise: exercise)
+                self.workoutViewModel.remove(exerciseViewModel: self.exerciseViewModel)
             }
             
-            if(self.exercise.sets.count > 0) {
+            if(self.exerciseViewModel.setViewModels.count > 0) {
                 VStack {
-                    ForEach(self.exercise.sets) { set in
+                    ForEach(self.exerciseViewModel.setViewModels) { svm in
                         SwipeToDelete {
-                            SetView(set: set, index: self.exercise.sets.firstIndex(where: { $0 == set }) ?? 0)
+                            SetView(setViewModel: svm, index: self.exerciseViewModel.setViewModels.firstIndex(where: { $0.set == svm.set! }) ?? 0)
                         } action: {
-                            self.viewModel.removeSet(for: exercise, set: set)
+                            self.exerciseViewModel.remove(setViewModel: svm)
                         }
                     }
                 }
@@ -47,6 +47,9 @@ struct ExerciseCard: View {
             }
         }
         .background(.secondarySurfaceContainer)
+        .onAppear {
+            self.exerciseViewModel.fetchSets()
+        }
     }
 }
 

@@ -1,1 +1,1 @@
-import SwiftData@Modelclass SetModel {    var reps: Int    var weight: Int    init(reps: Int = 0, weight: Int = 0) {        self.reps = reps        self.weight = weight    }}
+import SwiftData@Modelclass SetModel {    var reps: Int = 0    var weight: Int = 0    var exercise: ExerciseModel? = nil        init() {}}

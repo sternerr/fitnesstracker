@@ -11,13 +11,11 @@ struct EditWorkoutPage: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var viewModel: WorkoutViewModel
     
-    @State var workout: WorkoutModel
-    
     var body: some View {
         Container  {
             
             Block {
-                TopBar(text: self.workout.name) {
+                TopBar(text: self.viewModel.workout!.name) {
                     Image(systemName: "arrow.backward.square.fill")
                         .resizable()
                         .frame(width: 40.0, height: 40.0)
@@ -30,11 +28,14 @@ struct EditWorkoutPage: View {
             
             Block {
                 ScrollView {
-                    ForEach(workout.exercises, id: \.self) { exercise in
-                        ExerciseCard(viewModel: self.$viewModel, exercise: exercise)
+                    ForEach(self.viewModel.exerciseViewModels) { evm in
+                        ExerciseCard(exerciseViewModel: evm, workoutViewModel: self.$viewModel)
                     }
                 }
             }
+        }
+        .onAppear {
+            self.viewModel.fetchExercises()
         }
     }
 }

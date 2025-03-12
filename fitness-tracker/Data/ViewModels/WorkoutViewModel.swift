@@ -10,54 +10,64 @@ import SwiftUI
 import Observation
 
 @Observable
-class WorkoutViewModel {
+class WorkoutViewModel: Identifiable {
     var modelContext: ModelContext? = nil
-    
-    var workouts: [WorkoutModel] = []
-    
-    func fetchWorkout(byState state: String) {
-        self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
-            $0.state == state
-        }))) ?? []
+    var workout: WorkoutModel?
+    var exerciseViewModels: [ExerciseViewModel] = []
+        
+    init(workout: WorkoutModel? = nil, modelContext: ModelContext? = nil) {
+        self.modelContext = modelContext
+        self.workout = workout
     }
     
-    func fetchWorkout(byDate date: String) {
-        self.workouts = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
-            $0.date == date
-        }))) ?? []
-    }
-    
-    func addWorkout() {
-        self.modelContext?.insert(WorkoutModel())
-        self.fetchWorkout(byState: "")
-    }
-    
-    func addExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
-        workout.exercises.append(exercise)
-    }
-    
-    func addSet(for exercise: ExerciseModel, set: SetModel) {
-        exercise.sets.append(set)
-    }
-    
-    func saveWorkout(for workout: WorkoutModel, name: String?, state: String?, date: String?) {
-        workout.name = name ?? workout.name
-        workout.state = state ?? workout.state
-        workout.date = date ?? workout.date
-    }
-    
-    func removeWorkout(workout: WorkoutModel) {
-        self.workouts.removeAll(where: { $0.id == workout.id })
+    func fetchExercises() {
+        guard let modelContext = self.modelContext else { return }
+        guard let workout = self.workout else { return }
+        
+        self.exerciseViewModels = workout.exercises.map {
+            ExerciseViewModel(exercise: $0, modelContext: modelContext)
+        }
     }
 
-    func removeExercise(for workout: WorkoutModel, exercise: ExerciseModel) {
-        workout.exercises.removeAll(where: { $0.id == exercise.id })
-        self.modelContext?.delete(exercise)
+    func addWorkout() {
+        self.modelContext?.insert(WorkoutModel())
+        
+        self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
+            $0.state == ""
+        })))?.first ?? nil
     }
     
-    func removeSet(for exercise: ExerciseModel, set: SetModel) {
-        exercise.sets.removeAll(where: { $0.id == set.id })
-        self.modelContext?.delete(set)
+    func add(exercise: ExerciseModel) {
+        let newExercieVM = ExerciseViewModel()
+        newExercieVM.modelContext = self.modelContext
+        newExercieVM.exercise = exercise
+        
+        
+        self.workout?.exercises.append(exercise)
+        self.exerciseViewModels.append(newExercieVM)
+    }
+    
+    func save(name: String?, state: String?, date: String?) {
+        guard self.workout != nil else { return }
+        
+        self.workout!.name = name ?? self.workout!.name
+        self.workout!.state = state ?? self.workout!.state
+        self.workout!.date = date ?? self.workout!.date
+    }
+    
+    func remove() {
+        guard self.workout != nil else { return }
+        
+        self.modelContext?.delete(self.workout!)
+        self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
+            $0.state == ""
+        })))?.first ?? nil
+        self.exerciseViewModels = []
+    }
+        
+    func remove(exerciseViewModel: ExerciseViewModel) {
+        exerciseViewModel.remove()
+        self.exerciseViewModels.removeAll(where: { $0.exercise?.id == exerciseViewModel.exercise?.id })
     }
     
     func getExerciseCount(for workout: WorkoutModel) -> Int {

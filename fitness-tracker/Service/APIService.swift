@@ -8,39 +8,43 @@
 import SwiftData
 import Foundation
 
-struct Exercise: Decodable {
-    var name: String
+
+
+struct Suggestions: Codable {
+    let suggestions: [Suggestion]  // Notice the plural "suggestions" instead of "suggestion"
     
-    enum CodingKeys: String, CodingKey {
-        case name
+    struct Suggestion: Codable, Hashable {
+        let value: String
     }
 }
 
 //Singleton Pattern
 class APIService {
     static let shared = APIService()
-    private let baseURL = URL(string: "https://api.api-ninjas.com/v1")!
+    private let baseURL = URL(string: "https://wger.de/api/v2/exercise/search/?language=en&term=")!
     
     private init() {}
     
-    func fetchExercises() async -> [Exercise] {
-        let url = URL(string: "\(baseURL)/exercises")
-        var request = URLRequest(url: url!)
-        request.setValue(ENV.API_KEY, forHTTPHeaderField: "x-api-key")
-            
+    func fetchExercises(withFilter filter: String) async -> Suggestions {
+        guard !filter.isEmpty else { return Suggestions(suggestions: []) }
+        
+        let url = URL(string: "\(baseURL)\(filter)")
+        let request = URLRequest(url: url!)
+        
         if let (data, _) = try? await URLSession.shared.data(for: request) {
             return self.JSONfrom(data: data)
         }
         
-        return []
+        return Suggestions(suggestions: [])
     }
     
-    private func JSONfrom(data: Data) -> [Exercise] {
+    private func JSONfrom(data: Data) -> Suggestions {
+        let decoder = JSONDecoder()
+        
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode([Exercise].self, from: data)
+            return try decoder.decode(Suggestions.self, from: data)
         } catch {
-            fatalError("")
+            fatalError("\(error)")
         }
     }
 }
