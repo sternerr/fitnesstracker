@@ -37,7 +37,7 @@ struct ExerciseCard: View {
                 VStack {
                     ForEach(self.exerciseViewModel.setViewModels) { svm in
                         SwipeToDelete {
-                            SetView(setViewModel: svm, index: self.exerciseViewModel.setViewModels.firstIndex(where: { $0.set == svm.set! }) ?? 0)
+                            SetView(setViewModel: svm, index: self.exerciseViewModel.setViewModels.firstIndex(where: { $0.set == svm.set }) ?? 0)
                         } action: {
                             self.exerciseViewModel.remove(setViewModel: svm)
                         }

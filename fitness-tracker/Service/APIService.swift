@@ -13,8 +13,13 @@ import Foundation
 struct Suggestions: Codable {
     let suggestions: [Suggestion]
     
-    struct Suggestion: Codable, Hashable {
+    struct Suggestion: Codable, Hashable, Identifiable {
+        let id: UUID = UUID()
         let value: String
+        
+        enum CodingKeys: CodingKey {
+            case value
+        }
     }
 }
 

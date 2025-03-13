@@ -18,12 +18,11 @@ struct SaveGoalPage: View {
     @State private var amount: String = ""
     @State private var exercise: String = ""
     
-    @State private var selectedMeasurement: MeasurementType = .sets
+    @State private var selectedMeasurement: MeasurementType = .weight
     
     enum MeasurementType: String, CaseIterable, Identifiable {
-        case sets = "Sets"
-        case reps = "Reps"
-        case volume = "Volume"
+//        case reps = "reps"
+        case weight = "weight"
         
         var id: String { self.rawValue }
     }
@@ -128,10 +127,10 @@ struct SaveGoalPage: View {
         }
         .onAppear {
             if(self.goalViewModel != nil) {
-                self.title = self.goalViewModel!.goal!.title
-                self.description = self.goalViewModel!.goal!.goalDescription
-                self.amount = self.goalViewModel!.goal!.goalDescription
-                self.exercise = self.goalViewModel!.goal!.exercise
+                self.title = self.goalViewModel!.goal.title
+                self.description = self.goalViewModel!.goal.goalDescription
+                self.amount = String(self.goalViewModel!.goal.amount)
+                self.exercise = self.goalViewModel!.goal.exercise
             }
         }
     }

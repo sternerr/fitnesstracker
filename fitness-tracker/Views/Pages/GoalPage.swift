@@ -47,6 +47,7 @@ struct GoalPage: View {
         .onAppear{
             self.viewModel.modelContext = self.modelContext
             self.viewModel.fetchGoals()
+            self.viewModel.fetchExercises()
         }
     }
 }
@@ -54,12 +55,13 @@ struct GoalPage: View {
 struct GoalRow: View {
     @Binding var viewModel: GoalPageViewModel
     @State var goalViewModel: GoalViewModel?
-    @State private var progress: Double = 0.35
+    
+    @State private var progress: Double = 0
     
     var body: some View {
         VStack {
             HStack {
-                Text(self.goalViewModel!.goal!.title)
+                Text(self.goalViewModel!.goal.title)
                 
                 Spacer()
                 
@@ -78,6 +80,10 @@ struct GoalRow: View {
         }
         .padding()
         .background(.secondarySurfaceContainer)
+        .onAppear {
+            self.progress = self.viewModel.weightProgress(gvm: self.goalViewModel!)
+            print(self.progress)
+        }
     }
 }
 

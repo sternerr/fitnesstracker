@@ -12,28 +12,27 @@ import Observation
 @Observable
 class GoalViewModel: Identifiable {
     var modelContext: ModelContext? = nil
-    var goal: GoalModel?
+    var goal: GoalModel
    
-    init(goal: GoalModel? = nil, modelContext: ModelContext? = nil) {
+    init(goal: GoalModel, modelContext: ModelContext? = nil) {
         self.goal = goal
         self.modelContext = modelContext
     }
     
     func save(title: String?, description: String?, amount: Int?, exercise: String?) {
-        guard self.goal != nil else { return }
-        
-        self.goal!.title = title ?? self.goal!.title
-        self.goal!.goalDescription = description ?? self.goal!.goalDescription
-        self.goal!.amount = amount ?? self.goal!.amount
-        self.goal!.exercise = exercise ?? self.goal!.exercise
+        self.goal.title = title ?? self.goal.title
+        self.goal.goalDescription = description ?? self.goal.goalDescription
+        self.goal.amount = amount ?? self.goal.amount
+        self.goal.exercise = exercise ?? self.goal.exercise
     }
     
     func remove() {
-        guard let goal = self.goal else { return }
         guard let modelContext = self.modelContext else { return }
         
         modelContext.delete(goal)
     }
+    
+
     
 //    func totalSum(for goal: GoalModel) -> Double {
 //        let sets = Double(goal.setsAmount ?? "0") ?? 0

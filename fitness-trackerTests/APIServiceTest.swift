@@ -30,6 +30,8 @@ struct APIServiceTest {
         ])
         
         let res = APIService.shared.filter(suggestions: suggestions.suggestions, filter: "Pullover")
+        
+        #expect(res.count == 1, "Filter should return 1 element")
         #expect(suggestions.suggestions.last == res.first, "Filter do not return right element")
     }
     

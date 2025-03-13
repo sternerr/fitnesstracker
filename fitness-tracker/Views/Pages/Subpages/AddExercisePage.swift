@@ -55,7 +55,7 @@ struct AddExercisePage: View {
                     }
                 } else {
                     List {
-                        ForEach(APIService.shared.filter(suggestions: self.exer.suggestions, filter: text), id: \.self) { e in
+                        ForEach(APIService.shared.filter(suggestions: self.exer.suggestions, filter: text)) { e in
                             Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
@@ -72,8 +72,6 @@ struct AddExercisePage: View {
             }
         }
     }
-    
-    
 }
 
 #Preview {
