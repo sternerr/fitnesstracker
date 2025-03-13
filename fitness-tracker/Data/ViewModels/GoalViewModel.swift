@@ -10,43 +10,34 @@ import SwiftUI
 import Observation
 
 @Observable
-class GoalViewModel {
+class GoalViewModel: Identifiable {
     var modelContext: ModelContext? = nil
-    
-    var goals: [GoalModel] = []
-    
-    
-    func fetchGoals() {
-        self.goals = try! self.modelContext?.fetch(FetchDescriptor<GoalModel>()) ?? []
+    var goal: GoalModel
+   
+    init(goal: GoalModel, modelContext: ModelContext? = nil) {
+        self.goal = goal
+        self.modelContext = modelContext
     }
     
-    func addGoal(title: String, description: String, setsAmount: String? = nil, repsAmount: String? = nil, volumeAmount: String? = nil) {
-        let goal = GoalModel(title: title, goalDescription: description, setsAmount: setsAmount, repsAmount: repsAmount, volumeAmount: volumeAmount)
-        self.modelContext?.insert(goal)
-        try? self.modelContext?.save()
-        fetchGoals()
+    func save(title: String?, description: String?, amount: Int?, exercise: String?) {
+        self.goal.title = title ?? self.goal.title
+        self.goal.goalDescription = description ?? self.goal.goalDescription
+        self.goal.amount = amount ?? self.goal.amount
+        self.goal.exercise = exercise ?? self.goal.exercise
     }
     
-    func editGoal(goal: GoalModel?, title: String, description: String, setsAmount: String? = nil, repsAmount: String? = nil, volumeAmount: String? = nil) {
-        goal?.title = title
-        goal?.goalDescription = description
-        goal?.setsAmount = setsAmount
-        goal?.repsAmount = repsAmount
-        goal?.volumeAmount = volumeAmount
-        try? self.modelContext?.save()
-        fetchGoals()
+    func remove() {
+        guard let modelContext = self.modelContext else { return }
+        
+        modelContext.delete(goal)
     }
     
-    func removeGoal(goal: GoalModel) {
-        self.modelContext?.delete(goal)
-        try? self.modelContext?.save()
-        fetchGoals()
-    }
+
     
-    func totalSum(for goal: GoalModel) -> Double {
-        let sets = Double(goal.setsAmount ?? "0") ?? 0
-        let reps = Double(goal.repsAmount ?? "0") ?? 0
-        let volume = Double(goal.volumeAmount ?? "0") ?? 0
-        return sets * reps * volume
-    }
+//    func totalSum(for goal: GoalModel) -> Double {
+//        let sets = Double(goal.setsAmount ?? "0") ?? 0
+//        let reps = Double(goal.repsAmount ?? "0") ?? 0
+//        let volume = Double(goal.volumeAmount ?? "0") ?? 0
+//        return sets * reps * volume
+//    }
 }

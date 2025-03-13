@@ -12,8 +12,8 @@ import SwiftData
 struct GoalPage: View {
     @Environment(\.modelContext) private var modelContext
     
-    @State private var viewModel = GoalViewModel()
-    @State private var selectedGoal: GoalModel? = nil
+    @State private var viewModel = GoalPageViewModel()
+    @State private var selectedGoalViewModel: GoalViewModel? = nil
     
     var body: some View {
         NavigationStack {
@@ -23,72 +23,67 @@ struct GoalPage: View {
                         Spacer()
                     }
                 }
-                
-                List {
-                    ForEach(viewModel.goals) { item in
-                        GoalRow(goal: item, selectedGoal: $selectedGoal)
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    viewModel.removeGoal(goal: item)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                                .tint(.delete)
-                            }
+            
+                ScrollView {
+                    ForEach(self.viewModel.goalViewModels) { gvm in
+                        SwipeToDelete {
+                            GoalRow(viewModel: self.$viewModel, goalViewModel: gvm)
+                        } action: {
+                            self.viewModel.removeGoal(goalViewModel: gvm)
+                        }
                     }
                     
+                    NavigationLink(
+                        destination: SaveGoalPage(viewModel: self.$viewModel, goalViewModel: self.$selectedGoalViewModel)
+                            .navigationBarHidden(true)
+                    ){
+                        CustomButton(title: "New Goal")
+                    }
                 }
-                .padding(-8)
-                .scrollContentBackground(.hidden)
-                .navigationDestination(item: $selectedGoal) { _ in
-                    SaveGoalPage(viewModel: viewModel, selectedGoal: $selectedGoal, mode: .edit)
-                }
-                NavigationLink(
-                    destination: SaveGoalPage(viewModel: viewModel, selectedGoal: .constant(nil), mode: .add)
-                        .navigationBarHidden(true)
-                ){
-                    CustomButton(title: "New Goal")
-                }
-                
-                Spacer()
+                .padding()
                 
             }
-            
-            .onAppear{
-                self.viewModel.modelContext = self.modelContext
-                self.viewModel.fetchGoals()
-            }
+        }
+        .onAppear{
+            self.viewModel.modelContext = self.modelContext
+            self.viewModel.fetchGoals()
+            self.viewModel.fetchExercises()
         }
     }
 }
 
 struct GoalRow: View {
-    var goal: GoalModel
-    @Binding var selectedGoal: GoalModel?
+    @Binding var viewModel: GoalPageViewModel
+    @State var goalViewModel: GoalViewModel?
+    
+    @State private var progress: Double = 0
     
     var body: some View {
-        HStack {
-            Text(goal.title)
-                .padding()
-                .cornerRadius(8)
-
-            Spacer()
-            Button {
-                selectedGoal = goal
-            } label: {
-                Image(systemName: "pencil")
-                    .font(.system(size: 20))
-                    .foregroundColor(.primary70)
-                    .padding(8)
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 2)
+        VStack {
+            HStack {
+                Text(self.goalViewModel!.goal.title)
+                
+                Spacer()
+                
+                NavigationLink {
+                    SaveGoalPage(viewModel: self.$viewModel, goalViewModel: self.$goalViewModel)
+                        .navigationBarHidden(true)
+                } label: {
+                    Image(systemName: "pencil.circle.fill")
+                        .font(.system(size: 32))
+                        .foregroundStyle(.primary70)
+                }
             }
+            
+            ProgressView(value: progress)
+                .progressViewStyle(.linear)
         }
-        .background(
-            .secondarySurfaceContainer,
-            in: RoundedRectangle(cornerRadius: 8)
-        )
+        .padding()
+        .background(.secondarySurfaceContainer)
+        .onAppear {
+            self.progress = self.viewModel.weightProgress(gvm: self.goalViewModel!)
+            print(self.progress)
+        }
     }
 }
 

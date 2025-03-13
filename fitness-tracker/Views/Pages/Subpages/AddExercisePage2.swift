@@ -8,11 +8,9 @@
 import SwiftUI
 import SwiftData
 
-struct AddExercisePage: View {
-    @Environment(\.modelContext) private var modelContext
+struct AddExercisePage2: View {
     @Environment(\.dismiss) private var dismiss
-    
-    @Binding var viewModel: WorkoutViewModel
+    @Binding var exercise: String
     
     @State var exer: Suggestions = Suggestions(suggestions: [])
     
@@ -46,20 +44,18 @@ struct AddExercisePage: View {
                 
                 if(self.exer.suggestions.count <= 0  && !text.isEmpty) {
                     Button {
-                            let exercise = ExerciseModel(name: text)
-                        
-                            self.viewModel.add(exercise: exercise)
-                            self.dismiss()
+                        self.exercise = text
+                        self.dismiss()
                     } label: {
                         CustomButton(title: "Create Exercise")
                     }
                 } else {
                     List {
-                        ForEach(APIService.shared.filter(suggestions: self.exer.suggestions, filter: text)) { e in
+                        ForEach(APIService.shared.filter(suggestions: self.exer.suggestions, filter: text), id: \.self) { e in
                             Text(e.value)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                                 .onTapGesture {
-                                    self.viewModel.add(exercise: ExerciseModel(name: e.value))
+                                    self.exercise = e.value
                                     self.dismiss()
                                 }
                         }
@@ -72,9 +68,4 @@ struct AddExercisePage: View {
             }
         }
     }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: WorkoutModel.self, inMemory: true)
 }

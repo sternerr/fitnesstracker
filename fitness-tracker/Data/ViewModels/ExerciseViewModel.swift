@@ -30,9 +30,7 @@ class ExerciseViewModel: Identifiable {
     }
     
     func add(set: SetModel) {
-        let newSetWM = SetViewModel()
-        newSetWM.modelContext = self.modelContext
-        newSetWM.set = set
+        let newSetWM = SetViewModel(set: set, modelContext: self.modelContext)
         
         
         self.exercise?.sets.append(set)
@@ -46,6 +44,6 @@ class ExerciseViewModel: Identifiable {
     
     func remove(setViewModel: SetViewModel) {
         setViewModel.remove()
-        self.setViewModels.removeAll(where: { $0.set?.id == setViewModel.set?.id })
+        self.setViewModels.removeAll(where: { $0.set.id == setViewModel.set.id })
     }
 }

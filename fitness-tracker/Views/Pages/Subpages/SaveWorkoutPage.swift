@@ -41,6 +41,9 @@ struct SaveWorkoutPage: View {
                             .stroke(.secondarySurfaceContainer, lineWidth: 2)
                     )
 
+                DatePicker("Workout date", selection: $date, displayedComponents: [.date])
+                                     .datePickerStyle(CompactDatePickerStyle())
+                
                 Spacer()
                     .frame(minHeight: 128, maxHeight: 128)
                 
