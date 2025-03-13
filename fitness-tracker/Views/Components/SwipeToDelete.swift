@@ -36,6 +36,7 @@ struct SwipeToDelete<Content: View>: View {
             .scrollIndicators(.hidden)
             .scrollTargetBehavior(.viewAligned)
             .background(.delete)
+            .clipShape(.rect(cornerRadius: 10))
         }
     }
     

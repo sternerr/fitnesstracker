@@ -34,34 +34,36 @@ class WorkoutViewModel: Identifiable {
         
         self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
             $0.state == ""
-        })))?.first ?? nil
+        })))!.first!
     }
     
     func add(exercise: ExerciseModel) {
+        guard let workout = self.workout else { return }
+        
         let newExercieVM = ExerciseViewModel()
         newExercieVM.modelContext = self.modelContext
         newExercieVM.exercise = exercise
         
         
-        self.workout?.exercises.append(exercise)
+        workout.exercises.append(exercise)
         self.exerciseViewModels.append(newExercieVM)
     }
     
     func save(name: String?, state: String?, date: String?) {
-        guard self.workout != nil else { return }
+        guard let workout = self.workout else { return }
         
-        self.workout!.name = name ?? self.workout!.name
-        self.workout!.state = state ?? self.workout!.state
-        self.workout!.date = date ?? self.workout!.date
+        workout.name = name ?? workout.name
+        workout.state = state ?? workout.state
+        workout.date = date ?? workout.date
     }
     
     func remove() {
-        guard self.workout != nil else { return }
-        
-        self.modelContext?.delete(self.workout!)
+        guard let workout = self.workout else { return }
+        self.modelContext?.delete(workout)
+
         self.workout = (try? self.modelContext?.fetch(FetchDescriptor(predicate: #Predicate<WorkoutModel> {
             $0.state == ""
-        })))?.first ?? nil
+        })))!.first!
         self.exerciseViewModels = []
     }
         
@@ -71,16 +73,13 @@ class WorkoutViewModel: Identifiable {
     }
     
     func getExerciseCount() -> Int {
-        guard let workout = self.workout else { return 0 }
-        return workout.exercises.count
+        return workout!.exercises.count
     }
     
     func getSetsCount() -> Int {
-        guard let workout = self.workout else { return 0 }
-        
         var count: Int = 0
         
-        workout.exercises.forEach {
+        workout!.exercises.forEach {
             count += $0.sets.count
         }
         
@@ -88,10 +87,9 @@ class WorkoutViewModel: Identifiable {
     }
     
     func getRepsCount() -> Int {
-        guard let workout = self.workout else { return 0 }
         var count: Int = 0
         
-        workout.exercises.forEach {
+        workout!.exercises.forEach {
             $0.sets.forEach {
                 count += Int($0.reps)
             }
@@ -101,10 +99,9 @@ class WorkoutViewModel: Identifiable {
     }
     
     func getVolume() -> Int {
-        guard let workout = self.workout else { return 0 }
         var volume: Int = 0
         
-        workout.exercises.forEach {
+        workout!.exercises.forEach {
             $0.sets.forEach {
                 volume += Int($0.reps) * (Int($0.weight) == 0 ? 1 : Int($0.weight))
             }

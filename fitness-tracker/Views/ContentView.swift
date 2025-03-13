@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         
         TabView(selection: $selectedTab) {
-            Dashboard()
+            Dashboard(selectedTab: self.$selectedTab)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Dashboard")
@@ -53,15 +53,6 @@ struct ContentView: View {
             
             UITabBar.appearance().backgroundColor = .surfaceContainer.withAlphaComponent(1)
         })
-//        .task {
-//            if(self.exercises.count <= 0) {
-//                let res = await APIService.shared.fetchExercises()
-//                
-//                res.forEach {
-//                    self.modelContext.insert(ExerciseModel(name: $0.name))
-//                }
-//            }
-//        }
     }
 }
 

@@ -80,6 +80,8 @@ struct GoalRow: View {
         }
         .padding()
         .background(.secondarySurfaceContainer)
+        .clipShape(.rect(cornerRadius: 10))
+
         .onAppear {
             self.progress = self.viewModel.weightProgress(gvm: self.goalViewModel!)
             print(self.progress)
