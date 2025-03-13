@@ -47,6 +47,7 @@ struct ExerciseCard: View {
             }
         }
         .background(.secondarySurfaceContainer)
+        .clipShape(.rect(cornerRadius: 10))
         .onAppear {
             self.exerciseViewModel.fetchSets()
         }
