@@ -26,6 +26,10 @@ struct SetView: View {
         .padding(.vertical, 8)
         .padding(.horizontal, 32)
         .background(.secondarySurfaceContainer)
+        .onAppear {
+            self.repsText = self.setViewModel.set.reps
+            self.weightText = self.setViewModel.set.weight
+        }
     }
     
     enum InputType {
@@ -36,15 +40,15 @@ struct SetView: View {
     @ViewBuilder
     func InputField(type: InputType, text: Binding<Int>) -> some View {
         HStack {
-            TextField("0", value: text, formatter: NumberFormatter())
+            TextField("\(text.wrappedValue)", value: text, formatter: NumberFormatter())
                 .multilineTextAlignment(.trailing)
                 .keyboardType(.numberPad)
                 .onChange(of: text.wrappedValue, initial: false) { oldState, newState in
                     
                     if(type == .Weight) {
-                        self.setViewModel.set?.reps = Int(newState)
+                        self.setViewModel.setWeight(value: newState)
                     } else if(type == .Reps) {
-                        self.setViewModel.set?.weight = Int(newState)
+                        self.setViewModel.setReps(value: newState)
                     }
                 }
                 
