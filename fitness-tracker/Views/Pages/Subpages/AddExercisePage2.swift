@@ -67,5 +67,11 @@ struct AddExercisePage2: View {
                 Spacer()
             }
         }
+        .navigationBarHidden(true)
+        .onAppear {
+            Task {
+                self.exer = await APIService.shared.fetchExercises(withFilter: " ")
+            }
+        }
     }
 }

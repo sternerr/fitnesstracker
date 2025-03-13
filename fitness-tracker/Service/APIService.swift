@@ -9,7 +9,6 @@ import SwiftData
 import Foundation
 
 
-
 struct Suggestions: Codable {
     let suggestions: [Suggestion]
     
@@ -37,7 +36,18 @@ class APIService {
         let request = URLRequest(url: url!)
         
         if let (data, _) = try? await URLSession.shared.data(for: request) {
-            return self.JSONfrom(data: data)
+            print("_Exercises fetched")
+            let result = self.JSONfrom(data: data)
+            var uniqueSuggestions: [Suggestions.Suggestion] = []
+            
+            result.suggestions.forEach { suggestion in
+                if uniqueSuggestions.first(where: { $0.value == suggestion.value }) == nil {
+                    uniqueSuggestions.append(suggestion)
+                } else {
+                }
+            }
+            
+            return Suggestions(suggestions: uniqueSuggestions)
         }
         
         return Suggestions(suggestions: [])

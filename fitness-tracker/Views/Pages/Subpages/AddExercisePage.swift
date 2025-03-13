@@ -71,6 +71,11 @@ struct AddExercisePage: View {
                 Spacer()
             }
         }
+        .onAppear {
+            Task {
+                self.exer = await APIService.shared.fetchExercises(withFilter: " ")
+            }
+        }
     }
 }
 
