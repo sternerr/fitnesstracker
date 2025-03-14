@@ -30,5 +30,10 @@ extension HistoryPage {
                 self.workoutViewModels = []
             }
         }
+        
+        func removeWorkout(workoutViewModel: WorkoutViewModel) {
+            self.workoutViewModels.removeAll(where: { $0.workout == workoutViewModel.workout })
+            workoutViewModel.remove()
+        }
     }
 }

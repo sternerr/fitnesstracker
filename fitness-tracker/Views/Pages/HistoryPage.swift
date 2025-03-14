@@ -30,7 +30,11 @@ struct HistoryPage: View {
                             }
                         
                         ForEach(self.viewModel.workoutViewModels) { wvm in
-                            WorkoutCard(viewModel: wvm)
+                            SwipeToDelete {
+                                WorkoutCard(viewModel: wvm)
+                            } action: {
+                                self.viewModel.removeWorkout(workoutViewModel: wvm)
+                            }
                         }
                     }
                 }
