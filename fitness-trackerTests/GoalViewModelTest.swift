@@ -5,20 +5,27 @@
 //  Created by Maria Garic on 2025-03-10.
 //
 
-//import Testing
-//@testable import fitness_tracker
-//
-//struct GoalViewModelTest {
-//    
-//    private var viewModel: GoalViewModel = GoalViewModel()
-//    private var goals: [GoalModel] = [
-//        GoalModel(title: "Goal 1", goalDescription: "Desc 1", setsAmount: "5", repsAmount: "8", volumeAmount: "10"),
-//        GoalModel(title: "Goal 2", goalDescription: "Desc 2", setsAmount: "3", repsAmount: "6", volumeAmount: "15")
-//    ]
-//
-//    @Test func testTotalSum() async throws {
-//        #expect(self.viewModel.totalSum(for: self.goals[0]) == 400, "Should return 400")
-//        #expect(self.viewModel.totalSum(for: self.goals[1]) == 270, "Should return 270")
-//    }
-//}
+import Testing
+@testable import fitness_tracker
+
+struct GoalViewModelTest {
+    
+    private var viewModel: GoalPageViewModel = GoalPageViewModel()
+    private var gvm = GoalViewModel(goal: GoalModel(title: "Goal 1", goalDescription: "Desc 1", amount: 20, measurement: "weight", exercise: "Chin-Up"))
+
+    @Test func testTotalSum() {
+        self.sample()
+        #expect(self.viewModel.weightProgress(gvm: gvm) == 0.5, "Should return 0.5")
+    }
+    
+    func sample() {
+        self.viewModel.exerciseViewModels.append(
+            ExerciseViewModel(exercise: ExerciseModel(name: "Chin-Up", sets: [
+                SetModel(reps: 10, weight: 10),
+                SetModel(reps: 9, weight: 7),
+                SetModel(reps: 6, weight: 9)
+            ]))
+        )
+    }
+}
 
