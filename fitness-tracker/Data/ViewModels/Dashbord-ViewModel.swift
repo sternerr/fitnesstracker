@@ -6,6 +6,7 @@
 //
 
 import SwiftData
+import CoreData
 
 extension Dashboard {
     
@@ -46,7 +47,9 @@ extension Dashboard {
             guard let modelContext = self.modelContext else { return }
             
             do {
-                let workouts = try modelContext.fetch(FetchDescriptor<WorkoutModel>())
+                let workouts = try modelContext.fetch(FetchDescriptor<WorkoutModel>(
+                    sortBy: [SortDescriptor(\WorkoutModel.date)]
+                ))
                 
                 self.workoutViewModels = workouts.map { WorkoutViewModel(workout: $0, modelContext: modelContext) }
             } catch {
