@@ -28,7 +28,7 @@ git clone -b 0.1.0 https://github.com/Sternerr/uni-fitness-tracker
 2. Open in XCode
 ```
 cd uni-fitness-tracker
-open FitnessTracker.xcodeproj
+open fitness-tracker.xcodeproj/
 ```
 
 4. Select a simulator or connect a physical device.
