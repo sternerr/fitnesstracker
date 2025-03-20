@@ -27,7 +27,7 @@ git clone -b 0.1.0 https://github.com/Sternerr/uni-fitness-tracker
 
 2. Open in XCode
 ```
-cd fitness-tracker
+cd uni-fitness-tracker
 open FitnessTracker.xcodeproj
 ```
 
