@@ -1,5 +1,7 @@
 # University Project - Fitness Tracker
 
+CS | IOS Development | Jan - Mars, 2025
+
 ## Overview
 
 This is a Fitness Tracker application developed as part of a university course group project. The app us built using Swift and SwiftUI, providing an interface for tracking workouts and goals.
