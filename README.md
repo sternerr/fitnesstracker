@@ -23,12 +23,12 @@ Sometimes you just want to log your workout, track your goals, and move on. FitT
 
 1. Clone the Repo
 ```
-git clone -b 0.1.0 https://github.com/Sternerr/uni-fitness-tracker
+git clone -b 0.1.0 https://github.com/Sternerr/uni_fitness-tracker
 ```
 
 2. Open in XCode
 ```
-cd uni-fitness-tracker
+cd uni_fitness-tracker
 open fitness-tracker.xcodeproj/
 ```
 
