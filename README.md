@@ -1,15 +1,14 @@
-# University Project - Fitness Tracker
+# Fitness Tracker
+A simple, focused fitness tracker for iOS — built for speed, clarity, and clean progress tracking.
 
-CS | IOS Development | Jan - Mars, 2025
-
-## Overview
-
-This is a Fitness Tracker application developed as part of a university course group project. The app us built using Swift and SwiftUI, providing an interface for tracking workouts and goals.
+## Why this fitness tracker?
+For our university iOS development course, we wanted to build something functional and fast — a fitness tracker that actually feels good to use.
+Sometimes you just want to log your workout, track your goals, and move on. FitTrack makes that easy with a clean design, smooth experience, and no clutter.
 
 ## Features
   - Track daily workouts
   - Set fitness goals and track progress
-  - Visualize data with charts and graphs
+  - Visualize data with charts
 
 ## Technologies Used
   - Swift
@@ -39,3 +38,6 @@ open fitness-tracker.xcodeproj/
 ## Contributors
   - https://github.com/Sternerr
   - https://github.com/mariagaric
+
+
+> CS | IOS Development | Jan - Mars, 2025
